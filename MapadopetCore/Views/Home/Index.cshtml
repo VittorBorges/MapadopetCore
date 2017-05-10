@@ -1,0 +1,451 @@
+﻿    <environment names="Development">
+        <link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.3/dist/leaflet.css" />
+        <link rel="stylesheet" href="~/css/screen.css" />
+        <link rel="stylesheet" href="~/css/MarkerCluster.css" />
+        <link rel="stylesheet" href="~/css/MarkerCluster.Default.css" />
+        <link rel="stylesheet" href="~/css/leaflet.groupedlayercontrol.css" />
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+        <script src="https://code.jquery.com/jquery-1.9.1.min.js" integrity="sha256-wS9gmOZBqsqWxgIVgA8Y9WcQOa7PgSIX+rPA0VL2rbQ=" crossorigin="anonymous"></script>
+        <script src="https://unpkg.com/leaflet@1.0.3/dist/leaflet.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+        <script src="~/js/leaflet.markercluster-src.js"></script>
+        <script src="~/js/leaflet.groupedlayercontrol.js"></script>
+        <script src="~/data/pet.js"></script>
+        <script src="~/data/petShop.js"></script>
+        <script src="~/js/pet.js"></script>
+        <script src="~/js/petShop.js"></script>
+        <script src="~/js/jsrender.min.js"></script>
+        
+        <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&signed_in=true&key=AIzaSyBukZCOlWSgvLS-s7mPA5JQcL3uD6eRq84"></script>
+       
+        <script>
+            (function (i, s, o, g, r, a, m) {
+            i['GoogleAnalyticsObject'] = r; i[r] = i[r] || function () {
+                (i[r].q = i[r].q || []).push(arguments)
+            }, i[r].l = 1 * new Date(); a = s.createElement(o),
+                m = s.getElementsByTagName(o)[0]; a.async = 1; a.src = g; m.parentNode.insertBefore(a, m)
+            })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
+
+            ga('create', 'UA-272851-15', 'auto');
+            ga('send', 'pageview');
+
+        </script>
+
+    </environment>
+
+    <environment names="Staging,Production">
+        <link rel="stylesheet" href="https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.7/css/bootstrap.min.css"
+              asp-fallback-href="~/lib/bootstrap/dist/css/bootstrap.min.css"
+              asp-fallback-test-class="sr-only" asp-fallback-test-property="position" asp-fallback-test-value="absolute" />
+        <link rel="stylesheet" href="~/css/site.min.css" asp-append-version="true" />
+    </environment>
+       
+   
+    <style>
+        body {
+            padding: 0;
+            margin: 0;
+        }
+
+        html, body, #map {
+            height: 100vh;
+            width: 100vw;
+        }
+    </style>
+
+    <div id="map" style="position:fixed;left:0px;top:50px"></div>
+ 
+    <script type="text/javascript">
+
+            $.fn.serializeObject = function () {
+                var o = {};
+                var a = this.serializeArray();
+                $.each(a, function () {
+                    if (o[this.name] !== undefined) {
+                        if (!o[this.name].push) {
+                            o[this.name] = [o[this.name]];
+                        }
+                        o[this.name].push(this.value || '');
+                    } else {
+                        o[this.name] = this.value || '';
+                    }
+                });
+                return o;
+            };
+
+            $.postJSON = function (url, data, callback) {
+                return jQuery.ajax({
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    },
+                    'type': 'POST',
+                    'url': url,
+                    'data': data,
+                    'dataType': 'json',
+                    'success': callback
+                });
+            };
+
+        let posUser;
+
+        var tiles = L.tileLayer('https://api.mapbox.com/styles/v1/mapbox/streets-v10/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1Ijoidml0dG9yIiwiYSI6ImNqMGRzc2l1MDAwazEycXVpYWg1NHpnM2YifQ.e2d9NQgefD9vl6B1lNiePA', {
+            maxZoom: 18,
+            attribution: 'Mapa do Pet',
+            id: 'vittor.cj0dt4o6j00nv32qlx13bnn6u-1kkgx',
+            accessToken: 'pk.eyJ1Ijoidml0dG9yIiwiYSI6ImNqMGRzc2l1MDAwazEycXVpYWg1NHpnM2YifQ.e2d9NQgefD9vl6B1lNiePA'
+        });
+ 
+        function getLocation() {
+            if (navigator.geolocation) {
+               navigator.geolocation.getCurrentPosition(showPosition);
+            } else {
+                alert('Você precisa autorizar o navegador para ser redirecionado no mapa automaticamente.');
+            }
+        }
+
+        function posicionarMapa(lat, Lng) {
+            map.flyTo(new L.LatLng(lat, Lng), 13);
+        }
+
+        function showPosition(position) {
+            var marker = L.marker(new L.LatLng(position.coords.latitude, position.coords.longitude), { title: 'Você', icon: userIcon });
+            markers.addLayer(marker);
+            //map.flyTo(new L.LatLng(position.coords.latitude, position.coords.longitude), 13);
+        }
+
+        latlng = new L.LatLng(-10.185, -48.328);
+        var map = new L.Map('map', { center: latlng, zoom: 17, layers: [tiles] });
+        var markers = new L.MarkerClusterGroup();
+        var markersList = [];
+            
+        function loadPet(id) {
+            $.get("api/pet/" + id, function (data) {
+                var tmpl = $.templates("#tmplmdShowPet");
+                var html = tmpl.render(data);
+                $("#mdShowPetContent").html(html);
+                $('#mdShowPet').modal();
+
+                if (typeof DISQUS == "undefined") {
+                    var disqus_config = function () {
+                        this.page.url = "http://www.mapadopet.com.br/pet/" + id;
+                        this.page.identifier = "showpet" + id;
+                    };
+
+                    (function () { 
+                        var d = document, s = d.createElement('script');
+                        s.src = 'https://mapa-do-pet.disqus.com/embed.js';
+                        s.setAttribute('data-timestamp', +new Date());
+                        (d.head || d.body).appendChild(s);
+                    })();
+
+                } else {
+
+                    DISQUS.reset({
+                        reload: true,
+                        config: function () {
+                            this.page.identifier = "showpet" + id;
+                            this.page.url = "http://www.mapadopet.com.br/pet/" + id;
+                        }
+                    });
+
+                }
+
+            });
+        }
+
+        function loadGooglePlace(id) {
+            $.get("api/google/get/" + id, function (data) {
+                var tmpl = $.templates("#tmplmdShowGooglePlace");
+                var html = tmpl.render(data);
+                $("#mdShowGooglePlaceContent").html(html);
+                $('#mdShowGooglePlace').modal()
+            });
+        }
+
+        function populate() {
+
+            $.get("api/marca", function (data) {
+                let marcaPet;
+                marcaPet = data;
+                for (var i = 0; i < marcaPet.length; i++) {
+                    var marker = L.marker(new L.LatLng(marcaPet[i].cord[0], marcaPet[i].cord[1]), { title: marcaPet[i].nome, icon: petIcon });
+                    marker.on('click', function (a) {
+                        loadPet(marcaPet._id);
+                    });
+                    markers.addLayer(marker);
+                }
+            });
+
+
+            $.get("api/google/GetPlaces", { "lat": map.getCenter().lat, "lng": map.getCenter().lng }).done(function (data) {
+                let marcaGooglePlace;
+                marcaGooglePlace = data;
+                for (var i = 0; i < marcaGooglePlace.length; i++) {
+                    var marker = L.marker(new L.LatLng(marcaGooglePlace[i].cord[0], marcaGooglePlace[i].cord[1]), { title: marcaGooglePlace[i].name, icon: petShopIcon });
+                    let place_id = marcaGooglePlace[i].place_id;
+                    marker.on('click', function (a) {
+                        loadGooglePlace(place_id);
+                    });
+                    markers.addLayer(marker);
+                }
+            });
+
+			//for (var i = 0; i < petShopPoints.length; i++) {
+			//var a = petShopPoints[i];
+			//var title = a[2];
+			//var marker = L.marker(new L.LatLng(a[0], a[1]), { title: title , icon: petShopIcon });
+			////var marker = L.marker(new L.LatLng(a[0], a[1]), { icon: petShopIcon });
+			////marker.bindPopup(title);
+			//marker.on('click', function (a) {
+			//$('#localModal').modal()
+			//});
+			//markers.addLayer(marker);
+			//}
+
+			return false;
+		}
+
+		populate();
+		map.addLayer(markers);
+        getLocation();
+        
+        var Gmap;
+        var Gmarkers = [];
+
+        function initializeGMap() {
+            var GinitialPoint = new google.maps.LatLng(-10.185, -48.328);
+            var GmapOptions = {
+                zoom: 4,
+                center: GinitialPoint,
+                mapTypeId: google.maps.MapTypeId.ROADMAP
+            };
+            Gmap = new google.maps.Map(document.getElementById('Gmap-canvas'), GmapOptions);
+
+            google.maps.event.addListener(Gmap, 'click', function (event) {
+                addGMarker(event.latLng);
+                saveData(Gmap, event);
+            });
+
+            addGMarker(GinitialPoint);
+        }
+
+        function saveData(Gmap, event) {
+            var zoomLevel = Gmap.getZoom();
+            var pos = (event.latLng).toString();
+
+            pos = pos.replace('(', '');
+            pos = pos.replace(')', '');
+            pos = pos.replace(' ', '');
+
+            $('#gmapPetPosition').val(pos);
+        }
+
+        function addGMarker(location) {
+            clearGMarkers();
+            var Gmarker = new google.maps.Marker({
+                position: location,
+                map: Gmap,
+                draggable: true
+            });
+
+            google.maps.event.addListener(Gmarker, 'dragend', function (event) {
+                //$('#position').val('* '+this.getPosition().lat()+','+this.getPosition().lng());
+                saveData(Gmap, event);
+            });
+
+            Gmarkers.push(Gmarker);
+        }
+
+        function setAllMap(Gmap) {
+            for (var i = 0; i < Gmarkers.length; i++) {
+                Gmarkers[i].setMap(Gmap);
+            }
+        }
+
+        function clearGMarkers() {
+            setAllMap(null);
+        }
+
+        function showGMarkers() {
+            setAllMap(Gmap);
+        }
+
+        function deleteGMarkers() {
+            clearGMarkers();
+            Gmarkers = [];
+            $('#gmapPetPosition').val('0,0');
+        }
+
+        google.maps.event.addDomListener(window, 'load', initializeGMap);
+
+        function salvaLostPet() {
+            $.postJSON("api/pet", JSON.stringify($("#frmLostPet").serializeObject()));
+            returnSalvaLostPet();
+        }
+
+        function returnSalvaLostPet() {
+            $('#mdLostpet').modal('hide');
+            alert('Seu pet vai ser adicionado ao mapa em instantes.');
+        }
+       
+
+$(document).ready(function(){
+//    $('#msgModal').modal();
+});
+
+    </script>
+
+
+@*mdMensagemInicial*@
+    <div class="modal fade" tabindex="-1" role="dialog" id="msgModal">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">Mapa do Pet</h4>
+                </div>
+                <div class="modal-body">
+                    <p>Bem vindo ao Mapa do Pet, aqui vamos apresentar os 'Pets' abandonados, perdidos ou para ado&ccedil;&atilde;o.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Entrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+@*mdShowPet Modal*@
+    <script id="tmplmdShowPet" type="text/x-jsrender">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Pet perdido !!</h4>
+            </div>
+            <div class="modal-body">
+                <div class="card">
+                    <img class="card-img-top img-rounded img-responsive" src="{{:imagem}}" alt="Card image cap">
+                    <div class="card-block">
+                        <h4 class="card-title">Procura-se : {{:nome}}</h4>
+                        <p class="card-text">{{:descricao}}</p>
+                        <button type="button" class="btn btn-primary" data-dismiss="modal">Eu vi</button>
+                        <button type="button" class="btn btn-success" data-dismiss="modal">Eu encontrei</button>
+                    </div>
+
+                    <div id="disqus_thread"></div>
+
+                </div>
+            </div>
+        </div>
+    </script>
+
+    <div class="modal fade" tabindex="-1" role="dialog" id="mdShowPet">
+        <div class="modal-dialog" role="document" id="mdShowPetContent">
+            
+        </div>
+    </div>
+
+@*Esta aqui apenas para exemplo*@
+<script id="template" type="text/html">
+    <h1>${someVar}</h1>
+    {{if intro != ""}}
+    <small>${intro}</small>
+    {{/if}}
+    <p>${restOfVariables}</p>
+</script>
+
+@*mdShowGooglePlace Modal*@
+<script id="tmplmdShowGooglePlace" type="text/x-jsrender">
+    <div class="modal-content">
+        @*<div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title">Local Relacionado</h4>
+        </div>*@
+        <div class="modal-body">
+            <div class="card">
+                <div class="text-center">
+
+                    {{if photos != null }}
+                    <img class="card-img-top img-rounded img-responsive" style="width:300px" src="{{:img}}" alt="{{:name}}">
+                    {{else}}
+                    <img class="card-img-top img-rounded img-responsive" style="width:300px" src="/images/clinicapopup.jpg" alt="">
+                    {{/if}}
+
+                </div>
+                <div class="card-block">
+                    <h4 class="card-title">{{:name}}</h4>
+                    <p class="card-text">
+                        
+                        <address>{{:vicinity}}</address>
+
+                    <span class="label label-inverse" style="z-index: -1;padding: 10px;background-color:cornflowerblue; width:100px"> 63 - 3212100 </span>
+                    <span onclick="$(this).hide()" class="label label-info" style="position: relative; z-index: 100; left: -80px; padding: 10px; background-color:crimson;width:100px ">VER TELEFONE</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</script>
+
+    <div class="modal fade" tabindex="-1" role="dialog" id="mdShowGooglePlace">
+        <div class="modal-dialog" role="document" id="mdShowGooglePlaceContent">
+
+        </div>
+    </div>
+
+    @*mdLostpet Modal*@
+    <div class="modal fade" tabindex="-1" role="dialog" id="mdLostpet">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">Perdi meu Pet !!! </h4>
+                </div>
+                <div class="modal-body">
+
+                    <form class="form-horizontal" id="frmLostPet">
+                        <div class="form-group">
+                            <label for="tbNome" class="col-sm-4 control-label">Atende pelo nome </label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control" name="nome">
+                                <span class="help-block">Qual o nome do seu pet ?</span>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="comment" class="col-sm-4 control-label">Descrição:</label>
+                            <div class="col-sm-8">
+                                <textarea class="form-control" rows="5" name="descricao"></textarea>
+                                <span class="help-block">Descreva o seu pet, fale das cores, se estava com o pelo aparado ou não, estilo do rabo ou orelhas cortadas.</span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="tbNome" class="col-sm-4 control-label">Telefone de contato</label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control" name="contatos">
+                                <span class="help-block">Coloque um número com whatsapp para facilitar o contato !</span>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="tbNome" class="col-sm-4">Localização</label>
+                            <div class="col-sm-12">
+                                <input id="gmapPetPosition" name="localizacao" type="hidden">
+                                <div id="Gmap-canvas" style="width:550px;height:300px"> </div>
+                                <span class="help-block">Posicione a marcação no mapa na região que o seu pet sumiu. Não coloque em cima da sua residencia, coloque a marcação nas ruas ;).</span>
+                            </div>
+                        </div>
+                    </form>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" onclick="salvaLostPet()">Savar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="alert alert-success fade in" id="mensagemSucesso">
+        <a href="#" class="close" data-dismiss="alert">&times;</a>
+        <strong>Success!</strong> Your message has been sent successfully.
+    </div>
