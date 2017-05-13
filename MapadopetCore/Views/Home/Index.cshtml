@@ -324,8 +324,6 @@
 
 
         function atualizaFotoPet() {
-            console.log($("#mdLostpetFoto"));
-            alert("enviar");
 
             var form = new FormData();
 
@@ -334,7 +332,7 @@
             jQuery.ajax('/api/imagem/postfotopet', {
                 processData: false,
                 contentType: false,
-                data: formData
+                data: form
             }).done(function(data) {
                 alert(data);
             });
@@ -494,7 +492,7 @@ $(document).ready(function(){
 
                                 <a class='btn btn-primary' href='javascript:;'>
                                     Escolha o arquivo...
-                                    <input type="file" style='position:absolute;z-index:2;top:0;left:0;filter: alpha(opacity=0);-ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";opacity:0;background-color:transparent;color:transparent;' name="mdLostpetFoto" size="40" onchange='$("#upload-file-info").html($(this).val()); atualizaFotoPet();'>
+                                    <input type="file" style='position:absolute;z-index:2;top:0;left:0;filter: alpha(opacity=0);-ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";opacity:0;background-color:transparent;color:transparent;' name="mdLostpetFoto" id="mdLostpetFoto" size="40" onchange='$("#upload-file-info").html($(this).val()); atualizaFotoPet();'>
                                 </a>
                                 &nbsp;
                                 <span class='label label-info' id="upload-file-info"></span>
