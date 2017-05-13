@@ -198,9 +198,11 @@
                 let marcaPet;
                 marcaPet = data;
                 for (var i = 0; i < marcaPet.length; i++) {
-                    var marker = L.marker(new L.LatLng(marcaPet[i].cord[0], marcaPet[i].cord[1]), { title: marcaPet[i].nome, icon: petIcon });
+                    let marker = L.marker(new L.LatLng(marcaPet[i].cord[0], marcaPet[i].cord[1]), { title: marcaPet[i].nome, icon: petIcon });
+                    marker.attribution = marcaPet[i].id;
                     marker.on('click', function (a) {
-                        loadPet(marcaPet._id);
+                        console.log(this.attribution);
+                        loadPet(this.attribution);
                     });
                     markers.addLayer(marker);
                 }
@@ -317,10 +319,35 @@
             $('#mdLostpet').modal('hide');
             alert('Seu pet vai ser adicionado ao mapa em instantes.');
         }
-       
+
+        $("#upload-file-info").html($(this).val());
+
+
+        function atualizaFotoPet() {
+            console.log($("#mdLostpetFoto"));
+            alert("enviar");
+
+            var form = new FormData();
+
+            form.append("file", $("#mdLostpetFoto")[0].files[0]);
+
+            jQuery.ajax('/api/imagem/postfotopet', {
+                processData: false,
+                contentType: false,
+                data: formData
+            }).done(function(data) {
+                alert(data);
+            });
+
+        };
+
 
 $(document).ready(function(){
 //    $('#msgModal').modal();
+
+
+    //btnEnviarFotoPet
+
 });
 
     </script>
@@ -452,6 +479,28 @@ $(document).ready(function(){
                             <div class="col-sm-8">
                                 <input type="text" class="form-control" name="contatos">
                                 <span class="help-block">Coloque um número com whatsapp para facilitar o contato !</span>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="tbNome" class="col-sm-4 control-label">Foto do seu querido</label>
+                            <div class="col-sm-8">
+
+                                @*<label class="btn btn-primary" for="btnEnviarFotoPet">
+                                    <input id="btnEnviarFotoPet" type="file" style="display:none;">
+                                    Selecionar
+                                </label>*@
+
+
+                                <a class='btn btn-primary' href='javascript:;'>
+                                    Escolha o arquivo...
+                                    <input type="file" style='position:absolute;z-index:2;top:0;left:0;filter: alpha(opacity=0);-ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";opacity:0;background-color:transparent;color:transparent;' name="mdLostpetFoto" size="40" onchange='$("#upload-file-info").html($(this).val()); atualizaFotoPet();'>
+                                </a>
+                                &nbsp;
+                                <span class='label label-info' id="upload-file-info"></span>
+
+                                @*<input type="text" class="form-control" name="contatos">
+                                <span class="help-block">Coloque um número com whatsapp para facilitar o contato !</span>*@
                             </div>
                         </div>
 

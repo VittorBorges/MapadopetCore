@@ -27,7 +27,7 @@ namespace MapadopetCore.Data
 
         public Pet GetPet(string id)
         {
-            var filter = Builders<Marca>.Filter.Eq("Id", id);
+            var filter = Builders<Marca>.Filter.Eq("_id", ObjectId.Parse(id));
             //return _context.Marcas
             //                     .Find(filter)
             //                     .FirstOrDefault().pet;
