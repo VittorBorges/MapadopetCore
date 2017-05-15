@@ -21,9 +21,13 @@ namespace MapadopetCore.Data
             _context = new MapadopetContext(settings);
         }
 
-        public void AddImagem(Imagem item)
+        public string AddImagem(Imagem item)
         {
-            SaveFileStream(item.caminho, item.imgStream);
+            System.IO.Directory.CreateDirectory("c:/images");
+            item.patch = $"c:/images/{item.fileName}";
+            SaveFileStream(item.patch, item.imgStream);
+            item.patch = $"api/imagem/show/{item.fileName}";
+            return item.patch;
         }
 
         private void SaveFileStream(String path, Stream stream)
@@ -47,5 +51,7 @@ namespace MapadopetCore.Data
         {
             throw new NotImplementedException();
         }
+
+
     }
 }

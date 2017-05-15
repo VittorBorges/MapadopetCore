@@ -20,7 +20,7 @@ namespace MapadopetCore.Data
             _context = new MapadopetContext(settings);
         }
 
-        public void AddImagem(Imagem item)
+        public string AddImagem(Imagem item)
         {
             throw new NotImplementedException();
         }

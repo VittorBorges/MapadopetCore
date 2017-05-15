@@ -247,7 +247,7 @@
         function initializeGMap() {
             var GinitialPoint = new google.maps.LatLng(-10.185, -48.328);
             var GmapOptions = {
-                zoom: 4,
+                zoom: 13,
                 center: GinitialPoint,
                 mapTypeId: google.maps.MapTypeId.ROADMAP
             };
@@ -324,17 +324,18 @@
 
 
         function atualizaFotoPet() {
-
             var form = new FormData();
-
             form.append("file", $("#mdLostpetFoto")[0].files[0]);
-
             jQuery.ajax('/api/imagem/postfotopet', {
                 processData: false,
                 contentType: false,
+                method: "POST",
                 data: form
-            }).done(function(data) {
-                alert(data);
+            }).complete(function (data) {
+                //seta valor no hidden
+                $('#imgLostPetValue').val(data.responseText);
+                $("#imgLostPet").show();
+                $("#imgLostPet").find("img").attr("src", data.responseText);
             });
 
         };
@@ -483,23 +484,18 @@ $(document).ready(function(){
                         <div class="form-group">
                             <label for="tbNome" class="col-sm-4 control-label">Foto do seu querido</label>
                             <div class="col-sm-8">
-
-                                @*<label class="btn btn-primary" for="btnEnviarFotoPet">
-                                    <input id="btnEnviarFotoPet" type="file" style="display:none;">
-                                    Selecionar
-                                </label>*@
-
-
                                 <a class='btn btn-primary' href='javascript:;'>
                                     Escolha o arquivo...
                                     <input type="file" style='position:absolute;z-index:2;top:0;left:0;filter: alpha(opacity=0);-ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";opacity:0;background-color:transparent;color:transparent;' name="mdLostpetFoto" id="mdLostpetFoto" size="40" onchange='$("#upload-file-info").html($(this).val()); atualizaFotoPet();'>
                                 </a>
                                 &nbsp;
                                 <span class='label label-info' id="upload-file-info"></span>
-
-                                @*<input type="text" class="form-control" name="contatos">
-                                <span class="help-block">Coloque um número com whatsapp para facilitar o contato !</span>*@
                             </div>
+                        </div>
+
+                        <div class="form-group" id="imgLostPet">
+                            <input id="imgLostPetValue" name="imagem" type="hidden">
+                            <img class="card-img-top img-rounded img-responsive" src="" />
                         </div>
 
                         <div class="form-group">

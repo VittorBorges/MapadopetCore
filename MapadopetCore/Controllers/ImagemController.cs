@@ -7,6 +7,7 @@ using System.IO;
 using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Blob;
 using MapadopetCore.Interfaces;
+using Microsoft.AspNetCore.StaticFiles;
 
 // For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -25,17 +26,38 @@ namespace MapadopetCore.Controllers
             _ImagemRepository = imagemRepository;
         }
 
+        [HttpGet("{filename}")]
+        public FileStreamResult show(string filename)
+        {
+            string contentType;
+            filename = $"c:\\images\\{filename}";
+            new FileExtensionContentTypeProvider().TryGetContentType(filename, out contentType);
+            Stream stream = new MemoryStream(System.IO.File.ReadAllBytes(filename));
+            return new FileStreamResult(stream, contentType);
+        }
 
         [HttpPost]
-        public async Task<IActionResult> PostFotoPet(Microsoft.AspNetCore.Http.IFormFile file)
+        public async Task<string> PostFotoPet(Microsoft.AspNetCore.Http.IFormFile file)
         {
-            Models.Imagem i = new Models.Imagem();
-            i.imgStream = file.OpenReadStream();
-            i.caminho = $"c://imagens//{file.FileName}";
+            if (validaArquivo(file))
+            {
+                Guid g;
+                Models.Imagem i = new Models.Imagem();
+                i.imgStream = file.OpenReadStream();
+                i.fileName  = $"{Guid.NewGuid().ToString()}.{file.FileName.Split('.')?[1]}";
+                _ImagemRepository.AddImagem(i);
+                return i.patch;
+            }
+            else return "erro";
+        }
 
-            _ImagemRepository.AddImagem(i);
-
-            return null;
+        public bool validaArquivo(Microsoft.AspNetCore.Http.IFormFile file)
+        {
+            //tipos suportados
+            var type = "image/jpeg;image/png;image/bmp";
+            if (file.Length > 4194304) return false;
+            if (!type.Contains(file.ContentType)) return false;
+            return true;
         }
 
         //public async Task<string> UploadFileAsBlob(Stream stream, string filename)

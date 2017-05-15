@@ -28,14 +28,9 @@ namespace MapadopetCore.Data
         public Pet GetPet(string id)
         {
             var filter = Builders<Marca>.Filter.Eq("_id", ObjectId.Parse(id));
-            //return _context.Marcas
-            //                     .Find(filter)
-            //                     .FirstOrDefault().pet;
-
             return _context.Marcas
                               .Find(filter)//.Project<Marca>(Builders<Marca>.Projection.Include(p => p.pet))
                               .FirstOrDefault().pet;
-
         }
 
         public void AddPet(Pet item)
@@ -46,7 +41,6 @@ namespace MapadopetCore.Data
             {
                 double.TryParse(item.localizacao.Split(',')[0].ToString().Replace('.',','), out loc[0]);
                 double.TryParse(item.localizacao.Split(',')[1].ToString().Replace('.', ','), out loc[1]);
-                
             }
 
             Marca m = new Marca()

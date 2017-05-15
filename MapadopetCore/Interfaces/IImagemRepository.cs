@@ -9,7 +9,7 @@ namespace MapadopetCore.Interfaces
     {
         Task<IEnumerable<Imagem>> GetAllImagens(string petId);
         Imagem GetImagem(string petId);
-        void AddImagem(Imagem item);
+        string AddImagem(Imagem item);
         Task<string> RemoveImagem(string id);
     }
 }
