@@ -36,8 +36,6 @@ namespace MapadopetCore
 
             services.Configure<Settings>(options =>
             {
-                //options.ConnectionString = Configuration.GetSection("MongoConnectionWeb:ConnectionString").Value;
-                //options.Database = Configuration.GetSection("MongoConnectionWeb:Database").Value;
                 options.ConnectionString = Configuration.GetSection("MongoConnection:ConnectionString").Value;
                 options.Database = Configuration.GetSection("MongoConnection:Database").Value;
             });
@@ -45,6 +43,12 @@ namespace MapadopetCore
             services.AddTransient<IMarcaRepository, MarcaRepository>();
             services.AddTransient<IPetRepository, PetRepository>();
             services.AddTransient<IGoogleRepository, GoogleRepository>();
+#if DEBUG
+            // Validar se está local ou na internet, escolhendo qual o repositorio de imagens utilizar
+            services.AddTransient<IImagemRepository, ImagemLocalRepository>();
+#else
+            services.AddTransient<IImagemRepository, ImagemAzureRepository>();
+#endif
 
         }
 
