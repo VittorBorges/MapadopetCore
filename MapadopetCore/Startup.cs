@@ -43,10 +43,12 @@ namespace MapadopetCore
             services.AddTransient<IMarcaRepository, MarcaRepository>();
             services.AddTransient<IPetRepository, PetRepository>();
             services.AddTransient<IGoogleRepository, GoogleRepository>();
-
+#if DEBUG
             // Validar se está local ou na internet, escolhendo qual o repositorio de imagens utilizar
             services.AddTransient<IImagemRepository, ImagemLocalRepository>();
-            //services.AddTransient<IImagemRepository, ImagemAzureRepository>();
+#else
+            services.AddTransient<IImagemRepository, ImagemAzureRepository>();
+#endif
 
         }
 
