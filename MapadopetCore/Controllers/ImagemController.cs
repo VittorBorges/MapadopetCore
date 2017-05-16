@@ -45,7 +45,7 @@ namespace MapadopetCore.Controllers
                 Models.Imagem i = new Models.Imagem();
                 i.imgStream = file.OpenReadStream();
                 i.fileName  = $"{Guid.NewGuid().ToString()}.{file.FileName.Split('.')?[1]}";
-                _ImagemRepository.AddImagem(i);
+                i.patch = _ImagemRepository.AddImagem(i);
                 return i.patch;
             }
             else return "erro";

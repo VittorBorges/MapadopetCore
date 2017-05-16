@@ -190,7 +190,6 @@
         }
 
         function populate() {
-
             $.get("api/marca", function (data) {
                 let marcaPet;
                 marcaPet = data;
@@ -198,7 +197,6 @@
                     let marker = L.marker(new L.LatLng(marcaPet[i].cord[0], marcaPet[i].cord[1]), { title: marcaPet[i].nome, icon: petIcon });
                     marker.attribution = marcaPet[i].id;
                     marker.on('click', function (a) {
-                        console.log(this.attribution);
                         loadPet(this.attribution);
                     });
                     markers.addLayer(marker);
