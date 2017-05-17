@@ -49,7 +49,7 @@ namespace MapadopetCore.Data
                 {
                     MediaTypeWithQualityHeaderValue contentType = new MediaTypeWithQualityHeaderValue("application/json");
                     client.DefaultRequestHeaders.Accept.Add(contentType);
-                    HttpResponseMessage response = client.GetAsync($"https://maps.googleapis.com/maps/api/place/nearbysearch/json?location={item.cord[0]},{item.cord[1]}&radius={item.raio}&type=pet_store|veterinary_care&key=AIzaSyCfxAJhwYQ3NTgeQuxBCwaUyuuKCeHsNGI&language=PT-BR").Result;
+                    HttpResponseMessage response = client.GetAsync($"https://maps.googleapis.com/maps/api/place/nearbysearch/json?location={item.cord[0].ToString().Replace(',','.')},{item.cord[1].ToString().Replace(',', '.')}&radius={item.raio}&type=pet_store|veterinary_care&key=AIzaSyCfxAJhwYQ3NTgeQuxBCwaUyuuKCeHsNGI&language=PT-BR").Result;
                     string stringData = response.Content.ReadAsStringAsync().Result;
                     List<GooglePlace> data = JsonConvert.DeserializeObject<GooglePlaceReturn>(stringData).results;
                     _context.Places.InsertMany(data);
