@@ -72,6 +72,10 @@ namespace MapadopetCore
 
             app.UseMvc(routes =>
             {
+                // Configurando o uso de Areas
+                routes.MapRoute("areaRoute",
+                    "{area:exists}/{controller=Default}/{action=Index}/{id?}");
+
                 routes.MapRoute(
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
