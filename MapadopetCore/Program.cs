@@ -17,7 +17,7 @@ namespace MapadopetCore
                 .UseIISIntegration()
                 .UseStartup<Startup>()
                 .UseApplicationInsights()
-                .UseUrls("http://localhost:80","http://mapadopet.com.br:80")
+                .UseUrls("http://*:80")
                 .Build();
 
             host.Run();
