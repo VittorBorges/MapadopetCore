@@ -1,8 +1,0 @@
-C:\Users\vittor.borges\Documents\mapadopet.net\MapadopetCore\bin\Release\netcoreapp1.1\MapadopetCore.deps.json
-C:\Users\vittor.borges\Documents\mapadopet.net\MapadopetCore\bin\Release\netcoreapp1.1\MapadopetCore.runtimeconfig.json
-C:\Users\vittor.borges\Documents\mapadopet.net\MapadopetCore\bin\Release\netcoreapp1.1\MapadopetCore.runtimeconfig.dev.json
-C:\Users\vittor.borges\Documents\mapadopet.net\MapadopetCore\bin\Release\netcoreapp1.1\MapadopetCore.dll
-C:\Users\vittor.borges\Documents\mapadopet.net\MapadopetCore\bin\Release\netcoreapp1.1\MapadopetCore.pdb
-C:\Users\vittor.borges\Documents\mapadopet.net\MapadopetCore\obj\Release\netcoreapp1.1\MapadopetCore.AssemblyInfo.cs
-C:\Users\vittor.borges\Documents\mapadopet.net\MapadopetCore\obj\Release\netcoreapp1.1\MapadopetCore.dll
-C:\Users\vittor.borges\Documents\mapadopet.net\MapadopetCore\obj\Release\netcoreapp1.1\MapadopetCore.pdb
