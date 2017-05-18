@@ -22,14 +22,7 @@
     <Content Include="wwwroot\css\screen.css" />
     <Content Include="wwwroot\css\style.css" />
     <Content Include="wwwroot\favicon.ico" />
-    <Content Include="wwwroot\images\banner1.svg" />
-    <Content Include="wwwroot\images\banner2.svg" />
-    <Content Include="wwwroot\images\banner3.svg" />
-    <Content Include="wwwroot\images\banner4.svg" />
-    <Content Include="wwwroot\images\clinicapopup.jpg" />
     <Content Include="wwwroot\images\petIcon.png" />
-    <Content Include="wwwroot\images\petpopup.jpg" />
-    <Content Include="wwwroot\images\petpopup1.jpg" />
     <Content Include="wwwroot\images\petShopIcon.png" />
     <Content Include="wwwroot\images\userF.png" />
     <Content Include="wwwroot\images\userM.png" />

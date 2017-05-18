@@ -390,7 +390,18 @@ $(document).ready(function(){
             </div>
             <div class="modal-body">
                 <div class="card">
-                    <img class="card-img-top img-rounded img-responsive" src="{{:imagem}}" alt="Card image cap">
+                    
+
+
+                    {{if imagem.lenght == 0}}
+                    <img class="card-img-top img-rounded img-responsive" src="{{:imagem}}" alt="{{:nome}}">
+                    {{else}}
+                    <img class="card-img-top img-rounded img-responsive" src="/images/petDefault.jpg" alt="{{:nome}}">
+                    {{/if}}
+
+
+
+
                     <div class="card-block">
                         <h4 class="card-title">Procura-se : {{:nome}}</h4>
                         <p class="card-text">{{:descricao}}</p>
@@ -434,7 +445,7 @@ $(document).ready(function(){
                     {{if photos != null }}
                     <img class="card-img-top img-rounded img-responsive" style="width:300px" src="{{:img}}" alt="{{:name}}">
                     {{else}}
-                    <img class="card-img-top img-rounded img-responsive" style="width:300px" src="/images/clinicapopup.jpg" alt="">
+                    <img class="card-img-top img-rounded img-responsive"  src="/images/petshopDefault.jpg" alt="">
                     {{/if}}
 
                 </div>
