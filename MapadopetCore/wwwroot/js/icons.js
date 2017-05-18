@@ -14,3 +14,24 @@ var userIcon = L.icon({
     iconAnchor: [20, 20],
     popupAnchor: [0, -20] 
 });
+
+var petShopIcon = L.icon({
+    iconUrl: 'images/petShopIcon.png',
+    iconSize: [40, 40],
+    iconAnchor: [20, 20],
+    popupAnchor: [0, -20]
+});
+
+var petAdocaoIcon = L.icon({
+    iconUrl: 'images/petAdocaoIcon.png',
+    iconSize: [40, 40],
+    iconAnchor: [20, 20],
+    popupAnchor: [0, -20]
+});
+
+var petVistoIcon = L.icon({
+    iconUrl: 'images/petVistoIcon.png',
+    iconSize: [40, 40],
+    iconAnchor: [20, 20],
+    popupAnchor: [0, -20]
+});

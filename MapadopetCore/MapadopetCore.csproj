@@ -31,8 +31,7 @@
     <Content Include="wwwroot\js\leaflet.groupedlayercontrol.js" />
     <Content Include="wwwroot\js\leaflet.markercluster-src.js" />
     <Content Include="wwwroot\js\leaflet.markercluster.js" />
-    <Content Include="wwwroot\js\pet.js" />
-    <Content Include="wwwroot\js\petShop.js" />
+    <Content Include="wwwroot\js\icons.js" />
   </ItemGroup>
   
   <ItemGroup>
