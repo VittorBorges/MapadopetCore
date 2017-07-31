@@ -6,10 +6,10 @@
 
   <PropertyGroup>
     <PackageTargetFallback>$(PackageTargetFallback);portable-net45+win8+wp8+wpa81;</PackageTargetFallback>
-    <EnableDefaultContentItems>false</EnableDefaultContentItems>
+    <!--<EnableDefaultContentItems>false</EnableDefaultContentItems>-->
   </PropertyGroup>
 
-  <ItemGroup>
+  <!--<ItemGroup>
     <Compile Remove="wwwroot\lib\**" />
     <EmbeddedResource Remove="wwwroot\lib\**" />
     <None Remove="wwwroot\lib\**" />
@@ -32,7 +32,10 @@
     <Content Include="wwwroot\js\leaflet.markercluster-src.js" />
     <Content Include="wwwroot\js\leaflet.markercluster.js" />
     <Content Include="wwwroot\js\icons.js" />
-  </ItemGroup>
+    <Content Include="Areas\**\Views\**\dist.cshtml" />
+    <Content Include="Areas\**\modules\dist\*" />
+    <Content Include="Areas\**\modules\dist\maps\*" />
+  </ItemGroup>-->
   
   <ItemGroup>
     <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.0.0" />
@@ -51,8 +54,20 @@
   <ItemGroup>
     <DotNetCliToolReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Tools" Version="1.0.0" />
   </ItemGroup>
-  <ItemGroup>
+  
+  <!--<ItemGroup>
     <Folder Include="Areas\Admin\Models\" />
   </ItemGroup>
+  <ItemGroup>
+    <None Update="appsettings.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Views\Home\Index.cshtml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Views\Shared\_Layout.cshtml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>-->
 
 </Project>
