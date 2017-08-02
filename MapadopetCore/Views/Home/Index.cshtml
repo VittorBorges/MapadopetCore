@@ -4,6 +4,7 @@
         <link rel="stylesheet" href="~/css/MarkerCluster.css" />
         <link rel="stylesheet" href="~/css/MarkerCluster.Default.css" />
         <link rel="stylesheet" href="~/css/leaflet.groupedlayercontrol.css" />
+        <link rel="stylesheet" href="~/css/fb.css" />
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
         <script src="https://code.jquery.com/jquery-1.9.1.min.js" integrity="sha256-wS9gmOZBqsqWxgIVgA8Y9WcQOa7PgSIX+rPA0VL2rbQ=" crossorigin="anonymous"></script>
@@ -12,58 +13,22 @@
         <script src="~/js/leaflet.markercluster-src.js"></script>
         <script src="~/js/leaflet.groupedlayercontrol.js"></script>
         <script src="~/js/icons.js"></script>
-        <script src="~/js/petShop.js"></script>
         <script src="~/js/jsrender.min.js"></script>
-        
+        <script src="~/js/object-observe-lite.min.js"></script>
         <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&signed_in=true&key=AIzaSyBukZCOlWSgvLS-s7mPA5JQcL3uD6eRq84"></script>
-       
-        <script>
-            (function (i, s, o, g, r, a, m) {
-            i['GoogleAnalyticsObject'] = r; i[r] = i[r] || function () {
-                (i[r].q = i[r].q || []).push(arguments)
-            }, i[r].l = 1 * new Date(); a = s.createElement(o),
-                m = s.getElementsByTagName(o)[0]; a.async = 1; a.src = g; m.parentNode.insertBefore(a, m)
-            })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
-
-            ga('create', 'UA-272851-15', 'auto');
-            ga('send', 'pageview');
-
-        </script>
 
     </environment>
 
     <environment names="Staging,Production">
         <link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.3/dist/leaflet.css" />
-        <link rel="stylesheet" href="~/css/screen.css" />
-        <link rel="stylesheet" href="~/css/MarkerCluster.css" />
-        <link rel="stylesheet" href="~/css/MarkerCluster.Default.css" />
-        <link rel="stylesheet" href="~/css/leaflet.groupedlayercontrol.css" />
+        <link rel="stylesheet" href="~/css/site.min.css" />
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
         <script src="https://code.jquery.com/jquery-1.9.1.min.js" integrity="sha256-wS9gmOZBqsqWxgIVgA8Y9WcQOa7PgSIX+rPA0VL2rbQ=" crossorigin="anonymous"></script>
         <script src="https://unpkg.com/leaflet@1.0.3/dist/leaflet.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
-        <script src="~/js/leaflet.markercluster-src.js"></script>
-        <script src="~/js/leaflet.groupedlayercontrol.js"></script>
-       
-        <script src="~/js/icons.js"></script>
-        <script src="~/js/petShop.js"></script>
-        <script src="~/js/jsrender.min.js"></script>
-
         <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&signed_in=true&key=AIzaSyBukZCOlWSgvLS-s7mPA5JQcL3uD6eRq84"></script>
-
-        <script>
-            (function (i, s, o, g, r, a, m) {
-                i['GoogleAnalyticsObject'] = r; i[r] = i[r] || function () {
-                    (i[r].q = i[r].q || []).push(arguments)
-                }, i[r].l = 1 * new Date(); a = s.createElement(o),
-                    m = s.getElementsByTagName(o)[0]; a.async = 1; a.src = g; m.parentNode.insertBefore(a, m)
-            })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
-
-            ga('create', 'UA-272851-15', 'auto');
-            ga('send', 'pageview');
-
-        </script>
+        <script src="~/js/site.min.js"></script>
     </environment>
        
    
@@ -83,7 +48,50 @@
  
     <script type="text/javascript">
 
-            $.fn.serializeObject = function () {
+        let posUser;
+
+        var tiles = L.tileLayer('https://api.mapbox.com/styles/v1/mapbox/streets-v10/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1Ijoidml0dG9yIiwiYSI6ImNqMGRzc2l1MDAwazEycXVpYWg1NHpnM2YifQ.e2d9NQgefD9vl6B1lNiePA', {
+            maxZoom: 18,
+            attribution: 'Mapa do Pet',
+            id: 'vittor.cj0dt4o6j00nv32qlx13bnn6u-1kkgx',
+            accessToken: 'pk.eyJ1Ijoidml0dG9yIiwiYSI6ImNqMGRzc2l1MDAwazEycXVpYWg1NHpnM2YifQ.e2d9NQgefD9vl6B1lNiePA'
+        });
+
+        latlng = new L.LatLng(-10.185, -48.328);
+
+        var map = new L.Map('map', { center: latlng, zoom: 17, layers: [tiles] });
+        var markers = new L.MarkerClusterGroup();
+        var markersList = [];
+        var Gmap;
+        var Gmarkers = [];
+        //var getLoginStatus = '';
+
+        var objectFb = { getLoginStatus: null };
+        var fbUserId = null;
+
+        Object.observe(objectFb, function (changes) {
+
+            if (objectFb.getLoginStatus === 'connected') {
+
+                FB.api('/me', function (response) {
+                    $(".fbUser").html(response.name)
+                    $(".fbUserImg").attr("src", "http://graph.facebook.com/" + response.id + "/picture?type=normal");
+                    atualizaIconUserFb(response.id) 
+                });
+
+                $(".fbEntrar").hide();
+                $(".fbLogado").show();
+            } else {
+               
+                $(".fbEntrar").show();
+                $(".fbLogado").hide();
+            }
+            // comentar em produção
+            console.log("Changes: ", changes);
+        });
+
+
+        $.fn.serializeObject = function () {
                 var o = {};
                 var a = this.serializeArray();
                 $.each(a, function () {
@@ -99,7 +107,7 @@
                 return o;
             };
 
-            $.postJSON = function (url, data, callback) {
+        $.postJSON = function (url, data, callback) {
                 return jQuery.ajax({
                     headers: {
                         'Accept': 'application/json',
@@ -112,16 +120,7 @@
                     'success': callback
                 });
             };
-
-        let posUser;
-
-        var tiles = L.tileLayer('https://api.mapbox.com/styles/v1/mapbox/streets-v10/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1Ijoidml0dG9yIiwiYSI6ImNqMGRzc2l1MDAwazEycXVpYWg1NHpnM2YifQ.e2d9NQgefD9vl6B1lNiePA', {
-            maxZoom: 18,
-            attribution: 'Mapa do Pet',
-            id: 'vittor.cj0dt4o6j00nv32qlx13bnn6u-1kkgx',
-            accessToken: 'pk.eyJ1Ijoidml0dG9yIiwiYSI6ImNqMGRzc2l1MDAwazEycXVpYWg1NHpnM2YifQ.e2d9NQgefD9vl6B1lNiePA'
-        });
- 
+        
         function getLocation() {
             if (navigator.geolocation) {
                navigator.geolocation.getCurrentPosition(showPosition);
@@ -138,7 +137,6 @@
             map.addLayer(markers);
         }
 
-
         function posicionarMapa(lat, Lng) {
             map.flyTo(new L.LatLng(lat, Lng), 13);
         }
@@ -148,12 +146,6 @@
             markers.addLayer(marker);
             //map.flyTo(new L.LatLng(position.coords.latitude, position.coords.longitude), 13);
         }
-
-        latlng = new L.LatLng(-10.185, -48.328);
-
-        var map = new L.Map('map', { center: latlng, zoom: 17, layers: [tiles] });
-        var markers = new L.MarkerClusterGroup();
-        var markersList = [];
             
         function loadPet(id) {
             $.get("api/pet/" + id, function (data) {
@@ -237,13 +229,6 @@
 			return false;
 		}
 
-		populate();
-		map.addLayer(markers);
-        getLocation();
-        
-        var Gmap;
-        var Gmarkers = [];
-
         function initializeGMap() {
 
             var GinitialPoint = new google.maps.LatLng(-10.185, -48.328);
@@ -315,7 +300,19 @@
             $('#gmapPetPosition').val('0,0');
         }
 
-        google.maps.event.addDomListener(window, 'load', initializeGMap);
+        //google.maps.event.addDomListener(window, 'load', initializeGMap);
+
+        function perdiMeuPet() {
+            if (objectFb.getLoginStatus === 'connected') {
+                $('#mdLostpet').modal();
+            } else if (objectFb.getLoginStatus === 'not_authorized') {
+                    alert('Você ainda não Autorizou o nosso Sistema !!');
+                } else {
+                    alert('Não Conectado ao Facebook');
+                }
+        }
+
+      
 
         function salvaLostPet() {
             $.postJSON("api/pet", JSON.stringify($("#frmLostPet").serializeObject()));
@@ -335,8 +332,6 @@
             $("#imgLostPet").find("img").attr("src", "");
         }
 
-        $("#upload-file-info").html($(this).val());
-
         function atualizaFotoPet() {
             var form = new FormData();
             form.append("file", $("#mdLostpetFoto")[0].files[0]);
@@ -354,11 +349,92 @@
 
         };
 
+        //Google Maps
+        (function (i, s, o, g, r, a, m) {
+            i['GoogleAnalyticsObject'] = r; i[r] = i[r] || function () {
+                (i[r].q = i[r].q || []).push(arguments)
+            }, i[r].l = 1 * new Date(); a = s.createElement(o),
+                m = s.getElementsByTagName(o)[0]; a.async = 1; a.src = g; m.parentNode.insertBefore(a, m)
+        })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
 
-$(document).ready(function(){
-//    $('#msgModal').modal();
+        ga('create', 'UA-272851-15', 'auto');
+        ga('send', 'pageview');
 
-});
+
+        //Facebook
+      
+
+        (function (d, s, id) {
+            var js, fjs = d.getElementsByTagName(s)[0];
+            if (d.getElementById(id)) { return; }
+            js = d.createElement(s); js.id = id;
+            js.src = "//connect.facebook.net/pt_BR/sdk.js";
+            fjs.parentNode.insertBefore(js, fjs);
+        }(document, 'script', 'facebook-jssdk'));
+
+
+        //validar se é viavel
+        function atualizaIconUserFb(userid) {
+            setTimeout('', 5000);
+            $("img[src$='images/userM.png']").attr("src", "http://graph.facebook.com/" + userid + "/picture?type=normal");
+            $("img[src$='images/userM.png']").addClass("img-circle");
+
+        }
+
+        function loginFb() {
+
+            FB.login(function (response) {
+                
+                if (response.authResponse) {
+                    
+
+                } else {
+                    alert('O usuário cancelou o login ou não autorizou.');
+                }
+
+                objectFb.getLoginStatus = response.status;
+
+            });
+        };
+
+        //Inicio do loading
+        $(function () {
+
+
+            populate();
+            map.addLayer(markers);
+            getLocation();
+
+            $("#upload-file-info").html($(this).val());
+
+            initializeGMap();
+
+            $('#mdLostpet').on('shown.bs.modal', function () {
+                google.maps.event.trigger(Gmap, "resize");
+            });
+
+            window.fbAsyncInit = function () {
+                FB.init({
+                    appId: '1006198022832693',
+                    autoLogAppEvents: true,
+                    xfbml: true,
+                    version: 'v2.10'
+                });
+
+                FB.AppEvents.logPageView();
+
+                FB.getLoginStatus(function (response) {
+                    objectFb.getLoginStatus = response.status;
+                });
+
+            };
+
+            
+
+        });
+
+
+
 
     </script>
 
@@ -499,7 +575,7 @@ $(document).ready(function(){
                             <label for="tbNome" class="col-sm-4 control-label">Telefone de contato</label>
                             <div class="col-sm-8">
                                 <input type="text" class="form-control" name="contatos">
-                                <span class="help-block">Coloque um número com whatsapp para facilitar o contato !</span>
+                                <span class="help-block">Coloque um número do whatsapp para facilitar o contato !</span>
                             </div>
                         </div>
 
@@ -508,7 +584,7 @@ $(document).ready(function(){
                             <div class="col-sm-8">
                                 <a class='btn btn-primary' href='javascript:;'>
                                     Escolha o arquivo...
-                                    <input type="file" style='position:absolute;z-index:2;top:0;left:0;filter: alpha(opacity=0);-ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";opacity:0;background-color:transparent;color:transparent;' name="mdLostpetFoto" id="mdLostpetFoto" size="40" onchange='$("#upload-file-info").html($(this).val().split("\\")[2]); atualizaFotoPet();'>
+                                    <input type="file" style='position:absolute;z-index:2;top:0;left:0;filter: alpha(opacity=0);-ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";opacity:0;background-color:transparent;color:transparent;' name="mdLostpetFoto" id="mdLostpetFoto" size="40" @*onchange='$("#upload-file-info").html($(this).val().split("\\")[2]); atualizaFotoPet();'*@>
                                 </a>
                                 &nbsp;
                                 <span class='label label-info' id="upload-file-info"></span>
