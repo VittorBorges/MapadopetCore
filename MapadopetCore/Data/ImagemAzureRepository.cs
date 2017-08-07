@@ -27,8 +27,8 @@ namespace MapadopetCore.Data
 
             storageAccount = new CloudStorageAccount(
      new Microsoft.WindowsAzure.Storage.Auth.StorageCredentials(
-     "storagemapadopet",
-     "iZV0pN9pJhUjxt2W1OZ+z8dzhf63t0cSOWjZ6x8Iuu788yzUKzMX/Tjb+BF/DLT2z+L6jz48dqIk2I/+XF6rXg=="), true);
+     "mapapetstorage",
+     "ihV0FQiSwLbCWMv0QByo+LNqViFUjcPg3SSsWX0ig8LjuxblrlL9C/dbzjVbwOJ1OgRy6tXJlTnKvipARm/Xuw=="), true);
 
 
         }
@@ -45,7 +45,7 @@ namespace MapadopetCore.Data
             CloudBlockBlob blockBlob = container.GetBlockBlobReference(item.fileName);
             blockBlob.UploadFromStreamAsync(item.imgStream).Wait();
 
-            return $"https://storagemapadopet.blob.core.windows.net/pets/{item.fileName}";
+            return $"https://mapapetstorage.blob.core.windows.net/pets/{item.fileName}";
 
         }
 

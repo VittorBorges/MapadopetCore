@@ -5,7 +5,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     
-    <title>@ViewData["Title"] - Mapa do Pet</title>
+    <title>@ViewData["Title"] Mapa do Pet</title>
 
         <environment names="Development">
 
@@ -16,6 +16,7 @@
 
         @Html.Raw(JavaScriptSnippet.FullScript)
 </head>
+
 <body>
     <nav class="navbar navbar-inverse navbar-fixed-top">
         <div class="container">
@@ -26,7 +27,7 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a asp-area="" asp-controller="Home" asp-action="Index" class="navbar-brand">🐶 Mapa do Pet</a>
+                <a asp-area="" asp-controller="Home" asp-action="Index" class="navbar-brand"> <img style=" display: inline;@*padding-top:10px;*@" src="~/images/logoMenu.png"/> Mapa do Pet</a>
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
@@ -36,38 +37,45 @@
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Escolha sua cidade<span class="caret"></span></a>
                         <ul class="dropdown-menu">
-                            <li><a onclick="posicionarMapa(-10,-37)">Aracajú</a></li>
-                            <li><a onclick="posicionarMapa(01,48)">Belém</a></li>
-                            <li><a onclick="posicionarMapa(19,43)">Belo Horizonte</a></li>
-                            <li><a onclick="posicionarMapa(19,43)">Boa Vista</a></li>
-                            <li><a onclick="posicionarMapa(19,43)">Brasília</a></li>
-                            <li><a onclick="posicionarMapa(19,43)">Campo Grande</a></li>
-                            <li><a onclick="posicionarMapa(19,43)">Cuiabá</a></li>
-                            <li><a onclick="posicionarMapa(19,43)">Curitiba</a></li>
-                            <li><a onclick="posicionarMapa(19,43)">Florianópolis</a></li>
-                            <li><a onclick="posicionarMapa(19,43)">Fortaleza</a></li>
-                            <li><a onclick="posicionarMapa(19,43)">Goiânia</a></li>
-                            <li><a onclick="posicionarMapa(19,43)">João Pessoa</a></li>
-                            <li><a onclick="posicionarMapa(19,43)">Macapá</a></li>
-                            <li><a onclick="posicionarMapa(19,43)">Maceió</a></li>
-                            <li><a onclick="posicionarMapa(19,43)">Manaus</a></li>
-                            <li><a onclick="posicionarMapa(-10.185, -48.328)">Natal </a></li>
+                            <li><a onclick="posicionarMapa(-10.9759751 , -37.0908131)">Aracajú</a></li>
+                            <li><a onclick="posicionarMapa(-1.4305719,-48.4680917)">Belém</a></li>
+                            <li><a onclick="posicionarMapa(-19.9190244,-43.9378846)">Belo Horizonte</a></li>
+                            <li><a onclick="posicionarMapa(2.8168487,-60.6924661)">Boa Vista</a></li>
+                            <li><a onclick="posicionarMapa(-15.795755,-47.8987378)">Brasília</a></li>
+                            <li><a onclick="posicionarMapa(-20.4619554,-54.6239209)">Campo Grande</a></li>
+                            <li><a onclick="posicionarMapa(-15.6046535,-56.0991253)">Cuiabá</a></li>
+                            <li><a onclick="posicionarMapa(-25.4458257,-49.2742642)">Curitiba</a></li>
+                            <li><a onclick="posicionarMapa(-27.5947167,-48.5488461)">Florianópolis</a></li>
+                            <li><a onclick="posicionarMapa(-3.7704042,-38.5456938)">Fortaleza</a></li>
+                            <li><a onclick="posicionarMapa(-16.6977392,-49.2679055)">Goiânia</a></li>
+                            <li><a onclick="posicionarMapa(-7.1231834,-34.8505121)">João Pessoa</a></li>
+                            <li><a onclick="posicionarMapa(0.0321441,-51.0728868)">Macapá</a></li>
+                            <li><a onclick="posicionarMapa(-9.6479746,-35.7272585)">Maceió</a></li>
+                            <li><a onclick="posicionarMapa(-3.1213377,-60.0123562)">Manaus</a></li>
+                            <li><a onclick="posicionarMapa(-5.8040265,-35.2170366)">Natal </a></li>
                             <li><a onclick="posicionarMapa(-10.185, -48.328)">Palmas</a></li>
-                            <li><a onclick="posicionarMapa(19,43)">Porto Alegre </a></li>
-                            <li><a onclick="posicionarMapa(19,43)">Porto Velho </a></li>
-                            <li><a onclick="posicionarMapa(19,43)">Recife</a></li>
-                            <li><a onclick="posicionarMapa(19,43)">Rio Branco </a></li>
-                            <li><a onclick="posicionarMapa(19,43)">Rio de Janeiro</a></li>
-                            <li><a onclick="posicionarMapa(19,43)">Salvador</a></li>
-                            <li><a onclick="posicionarMapa(19,43)">São Luís</a></li>
-                            <li><a onclick="posicionarMapa(19,43)">São Paulo</a></li>
+                            <li><a onclick="posicionarMapa(-30.0376941,-51.2240415)">Porto Alegre </a></li>
+                            <li><a onclick="posicionarMapa(-8.7584998,-63.9019365)">Porto Velho </a></li>
+                            <li><a onclick="posicionarMapa(-8.0564309,-34.8916875)">Recife</a></li>
+                            <li><a onclick="posicionarMapa(-9.9763048,-67.8268048)">Rio Branco </a></li>
+                            <li><a onclick="posicionarMapa(-22.913442,-43.1946439)">Rio de Janeiro</a></li>
+                            <li><a onclick="posicionarMapa(-12.9796438,-38.5073292)">Salvador</a></li>
+                            <li><a onclick="posicionarMapa(-2.5395513,-44.2858547)">São Luís</a></li>
+                            <li><a onclick="posicionarMapa(-23.5509424,-46.6381206)">São Paulo</a></li>
                         </ul>
                     </li>
 
                     <li><a asp-area="" asp-controller="Home" asp-action="About">Sobre</a></li>
 
+                    <li class="dropdown fbLogado" style="display:none">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><img src="" class="img-circle img-responsive fbUserImg">  <span class="fbUser"></span><span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="#" onclick="FB.logout();">Sair</a></li>
+                        </ul>
+                    </li>
+
                     <li class="fbEntrar" style="display:none"><button type="button" class="btn btn-primary" onclick="loginFb()">Entrar</button></li>
-                    <li class="fbLogado" style="display:none"><a href="#"> <img src="" class="img-circle img-responsive fbUserImg">  <span class="fbUser"></span></a></li>
+                    <li ><a href="#">  </li>
 
                 </ul>
             </div>

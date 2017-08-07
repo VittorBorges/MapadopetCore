@@ -4,6 +4,7 @@
         <link rel="stylesheet" href="~/css/MarkerCluster.css" />
         <link rel="stylesheet" href="~/css/MarkerCluster.Default.css" />
         <link rel="stylesheet" href="~/css/leaflet.groupedlayercontrol.css" />
+        <link rel="stylesheet" href="~/css/leaflet.contextmenu.min.css" />
         <link rel="stylesheet" href="~/css/fb.css" />
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
@@ -12,6 +13,7 @@
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
         <script src="~/js/leaflet.markercluster-src.js"></script>
         <script src="~/js/leaflet.groupedlayercontrol.js"></script>
+        <script src="~/js/leaflet.contextmenu.min.js"></script>
         <script src="~/js/icons.js"></script>
         <script src="~/js/jsrender.min.js"></script>
         <script src="~/js/object-observe-lite.min.js"></script>
@@ -59,7 +61,33 @@
 
         latlng = new L.LatLng(-10.185, -48.328);
 
-        var map = new L.Map('map', { center: latlng, zoom: 17, layers: [tiles] });
+        var map = new L.Map('map', {
+            center: latlng, zoom: 17, layers: [tiles], contextmenu: true,
+            contextmenuWidth: 200,
+            contextmenuItems: [{
+                text: 'Perdi Meu Pet',
+                callback: showCoordinates
+            }, '-', {
+                text: 'Vi um Pet sozinho',
+                callback: showCoordinates
+            }, '-', {
+                text: 'Pet para adoção',
+                callback: showCoordinates
+            }, {
+                    text: 'Centralizar',
+                    icon: 'images/center.png',
+                callback: centerMap
+                },
+                '-'
+                , {
+                text: 'Zoom in',
+                icon: 'images/zoom-in.png',
+                callback: zoomIn
+            }, {
+                text: 'Zoom out',
+                icon: 'images/zoom-out.png',
+                callback: zoomOut
+            }] });
         var markers = new L.MarkerClusterGroup();
         var markersList = [];
         var Gmap;
@@ -69,11 +97,29 @@
         var objectFb = { getLoginStatus: null };
         var fbUserId = null;
 
+        //mapas
+        function showCoordinates(e) {
+            alert(e.latlng);
+        }
+
+        function centerMap(e) {
+            map.panTo(e.latlng);
+        }
+
+        function zoomIn(e) {
+            map.zoomIn();
+        }
+
+        function zoomOut(e) {
+            map.zoomOut();
+        }
+
         Object.observe(objectFb, function (changes) {
 
             if (objectFb.getLoginStatus === 'connected') {
 
                 FB.api('/me', function (response) {
+                    console.log(response);
                     $(".fbUser").html(response.name)
                     $(".fbUserImg").attr("src", "http://graph.facebook.com/" + response.id + "/picture?type=normal");
                     atualizaIconUserFb(response.id) 
@@ -87,9 +133,8 @@
                 $(".fbLogado").hide();
             }
             // comentar em produção
-            console.log("Changes: ", changes);
+            //console.log("Changes: ", changes);
         });
-
 
         $.fn.serializeObject = function () {
                 var o = {};
@@ -138,7 +183,7 @@
         }
 
         function posicionarMapa(lat, Lng) {
-            map.flyTo(new L.LatLng(lat, Lng), 13);
+            map.flyTo(new L.LatLng(lat, Lng), 14);
         }
 
         function showPosition(position) {
@@ -312,6 +357,7 @@
                 }
         }
 
+        
       
 
         function salvaLostPet() {
@@ -362,8 +408,6 @@
 
 
         //Facebook
-      
-
         (function (d, s, id) {
             var js, fjs = d.getElementsByTagName(s)[0];
             if (d.getElementById(id)) { return; }
@@ -386,7 +430,8 @@
             FB.login(function (response) {
                 
                 if (response.authResponse) {
-                    
+
+                    console.log(response);
 
                 } else {
                     alert('O usuário cancelou o login ou não autorizou.');
@@ -399,7 +444,6 @@
 
         //Inicio do loading
         $(function () {
-
 
             populate();
             map.addLayer(markers);
@@ -424,6 +468,7 @@
                 FB.AppEvents.logPageView();
 
                 FB.getLoginStatus(function (response) {
+                    console.log(response);
                     objectFb.getLoginStatus = response.status;
                 });
 
@@ -432,10 +477,7 @@
             
 
         });
-
-
-
-
+        
     </script>
 
 

@@ -28,8 +28,8 @@ namespace MapadopetCore.Data
             try
             {
                 var point = GeoJson.Point(GeoJson.Geographic(l.lat, l.lng));
-                var locationQuery = new FilterDefinitionBuilder<GooglePlace>().Near(tag => tag.cord , point, 20000); 
-                return await _context.Places.Find(locationQuery).Limit(100).ToListAsync();
+                var locationQuery = new FilterDefinitionBuilder<GooglePlace>().Near(tag => tag.cord, point, 200000000000000);
+                return await _context.Places.Find(locationQuery).Limit(1000).ToListAsync();
             }
             catch (Exception ex)
             {
@@ -37,6 +37,8 @@ namespace MapadopetCore.Data
             }
             return null;
         }
+
+
 
         public string UpdatePlaces()
         {
@@ -50,6 +52,7 @@ namespace MapadopetCore.Data
                     MediaTypeWithQualityHeaderValue contentType = new MediaTypeWithQualityHeaderValue("application/json");
                     client.DefaultRequestHeaders.Accept.Add(contentType);
                     HttpResponseMessage response = client.GetAsync($"https://maps.googleapis.com/maps/api/place/nearbysearch/json?location={item.cord[0].ToString().Replace(',','.')},{item.cord[1].ToString().Replace(',', '.')}&radius={item.raio}&type=pet_store|veterinary_care&key=AIzaSyCfxAJhwYQ3NTgeQuxBCwaUyuuKCeHsNGI&language=PT-BR").Result;
+                    //https://maps.googleapis.com/maps/api/place/nearbysearch/json?pagetoken=CqQCFQEAAMwvyaE6MbU0zKHsFaEq7qAykFapxKN1jm5x44yntAIGM33Q7d844rTxpjxIlEYjp2AO2rbd3Ucfr7o3-GWlOZ2zxFFs2m0KUgy0pgbpKP4k8s2Xl4vjbxQPlSSBPae1G7vnxxpJGw-pDl8_MQv2N66bQx74UVN4audGRrso8dnSGrGMvKWke-Gc_CPqF-1K6QzkTt8gDRLkDlnUz56gCrCsq-vso8HkVO3e6_vb0d0WgCEtVpubuqaG4fC3syL1N_6Q_mDx31Q__4G5h1H9zpGIZg4LQS2kkE5zXquIcuJmGgTu_4tS-hGwTibIrWb_o1CXUvCK5_32mApqxtWAWTEpxYoTKZZ0pgTNw0CqyA5m6hFBzEDVR_DeLf_mgKECHBIQHHaCGdJkTpxIhrn_3Hbp4hoUqytgEWc3L7i-Vk-uvZEgI_5Ua4Y&location=-10.185, -48.328&radius=5000&type=pet_store|veterinary_care&key=AIzaSyCfxAJhwYQ3NTgeQuxBCwaUyuuKCeHsNGI&language=PT-BR
                     string stringData = response.Content.ReadAsStringAsync().Result;
                     List<GooglePlace> data = JsonConvert.DeserializeObject<GooglePlaceReturn>(stringData).results;
                     _context.Places.InsertMany(data);

@@ -7,8 +7,14 @@
     <!--<EnableDefaultContentItems>false</EnableDefaultContentItems>-->
   </PropertyGroup>
   <ItemGroup>
+    <Content Include="wwwroot\app_offline.htm" />
     <Content Include="wwwroot\css\fb.css" />
+    <Content Include="wwwroot\css\leaflet.contextmenu.min.css" />
     <Content Include="wwwroot\favicon.ico" />
+    <Content Include="wwwroot\images\logoMenu.png" />
+    <Content Include="wwwroot\images\zoom-in.png" />
+    <Content Include="wwwroot\images\zoom-out.png" />
+    <Content Include="wwwroot\js\leaflet.contextmenu.min.js" />
     <Content Include="wwwroot\js\object-observe-lite.min.js" />
   </ItemGroup>
   <!--<ItemGroup>

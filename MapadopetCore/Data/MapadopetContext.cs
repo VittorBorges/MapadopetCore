@@ -47,5 +47,13 @@ namespace MapadopetCore.Data
             }
         }
 
+        public IMongoCollection<FacebookUser> FacebookUsers
+        {
+            get
+            {
+                return _database.GetCollection<FacebookUser>("FacebookUser");
+            }
+        }
+
     }
 }

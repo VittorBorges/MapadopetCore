@@ -32,11 +32,7 @@ namespace MapadopetCore.Controllers
         [HttpGet]
         public string atualizar()
         {
-
-            
-
                 return _googleRepository.UpdatePlaces(); ;
-           
 
         }
 
