@@ -14,10 +14,10 @@ namespace MapadopetCore.Models
         //public DateTime CreatedOn { get; set; } = DateTime.Now;
         public string UpdatedOn { get; set; }
         public string CreatedOn { get; set; }
-        public int UserId { get; set; } = 0;
         public double[] cord { get; set; }
         public Pet pet { get; set; }
         public string id { get { return _id.ToString(); } }
+
 
     }
 }

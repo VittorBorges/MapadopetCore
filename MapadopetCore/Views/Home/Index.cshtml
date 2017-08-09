@@ -51,6 +51,7 @@
     <script type="text/javascript">
 
         let posUser;
+        let posPin = new L.LatLng(-10.185, -48.328);
 
         var tiles = L.tileLayer('https://api.mapbox.com/styles/v1/mapbox/streets-v10/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1Ijoidml0dG9yIiwiYSI6ImNqMGRzc2l1MDAwazEycXVpYWg1NHpnM2YifQ.e2d9NQgefD9vl6B1lNiePA', {
             maxZoom: 18,
@@ -59,26 +60,29 @@
             accessToken: 'pk.eyJ1Ijoidml0dG9yIiwiYSI6ImNqMGRzc2l1MDAwazEycXVpYWg1NHpnM2YifQ.e2d9NQgefD9vl6B1lNiePA'
         });
 
-        latlng = new L.LatLng(-10.185, -48.328);
+        
 
         var map = new L.Map('map', {
-            center: latlng, zoom: 17, layers: [tiles], contextmenu: true,
+            center: posPin, zoom: 16, layers: [tiles], contextmenu: true,
             contextmenuWidth: 200,
             contextmenuItems: [{
                 text: 'Perdi Meu Pet',
-                callback: showCoordinates
+                callback: menuLostPet,
+                icon: 'images/contextMenuPet.png',
             }, '-', {
                 text: 'Vi um Pet sozinho',
-                callback: showCoordinates
+                callback: menuPetAbandonado,
+                icon: 'images/contextMenuVisto.png',
             }, '-', {
                 text: 'Pet para adoção',
-                callback: showCoordinates
-            }, {
+                callback: menuPetAdocao,
+                icon: 'images/contextMenuAdocao.png',
+            }, 
+                '-',{
                     text: 'Centralizar',
-                    icon: 'images/center.png',
-                callback: centerMap
-                },
-                '-'
+                    callback: menuCentralizar,
+                    icon: 'images/contextMenuCentro.png',
+                }
                 , {
                 text: 'Zoom in',
                 icon: 'images/zoom-in.png',
@@ -93,7 +97,7 @@
         var Gmap;
         var Gmarkers = [];
         //var getLoginStatus = '';
-
+        var userObject = null;
         var objectFb = { getLoginStatus: null };
         var fbUserId = null;
 
@@ -102,7 +106,35 @@
             alert(e.latlng);
         }
 
-        function centerMap(e) {
+        function menuLostPet(e) {
+           // console.log(e);
+            Gmap.setCenter(e.latlng);
+            Gmap.setZoom(17);
+            clearGMarkers();
+            addGMarker(e.latlng);
+            perdiMeuPet();
+        }
+
+        function menuPetAbandonado(e) {
+            // console.log(e);
+            Gmap.setCenter(e.latlng);
+            Gmap.setZoom(17);
+            clearGMarkers();
+            addGMarker(e.latlng);
+            perdiMeuPet();
+        }
+
+        function menuPetAdocao(e) {
+            // console.log(e);
+            Gmap.setCenter(e.latlng);
+            Gmap.setZoom(17);
+            clearGMarkers();
+            addGMarker(e.latlng);
+            perdiMeuPet();
+        }
+
+
+        function menuCentralizar(e) {
             map.panTo(e.latlng);
         }
 
@@ -118,17 +150,30 @@
 
             if (objectFb.getLoginStatus === 'connected') {
 
-                FB.api('/me', function (response) {
+                FB.api('/me', {
+                    fields: ['id',
+                        'birthday',
+                        'email',
+                        'first_name',
+                        'gender',
+                        'hometown',
+                        'languages',
+                        'last_name',
+                        'locale',
+                        'name',
+                        'relationship_status']
+                }, function (response) {
+                    userObject = response
                     console.log(response);
                     $(".fbUser").html(response.name)
                     $(".fbUserImg").attr("src", "http://graph.facebook.com/" + response.id + "/picture?type=normal");
-                    atualizaIconUserFb(response.id) 
+                    atualizaIconUserFb(response.id)
                 });
 
                 $(".fbEntrar").hide();
                 $(".fbLogado").show();
             } else {
-               
+
                 $(".fbEntrar").show();
                 $(".fbLogado").hide();
             }
@@ -165,7 +210,7 @@
                     'success': callback
                 });
             };
-        
+
         function getLocation() {
             if (navigator.geolocation) {
                navigator.geolocation.getCurrentPosition(showPosition);
@@ -191,7 +236,7 @@
             markers.addLayer(marker);
             //map.flyTo(new L.LatLng(position.coords.latitude, position.coords.longitude), 13);
         }
-            
+
         function loadPet(id) {
             $.get("api/pet/" + id, function (data) {
                 var tmpl = $.templates("#tmplmdShowPet");
@@ -205,12 +250,12 @@
                         this.page.url = "http://www.mapadopet.com.br/pet/" + id;
                         this.page.identifier = "showpet" + id;
                     };
-                    (function () { 
+                    (function () {
                         var d = document, s = d.createElement('script');
                         s.src = 'https://mapa-do-pet.disqus.com/embed.js';
                         s.setAttribute('data-timestamp', +new Date());
                         (d.head || d.body).appendChild(s);
-                            setTimeout(function () { 
+                            setTimeout(function () {
                                 DISQUS.reset({
                                     reload: true,
                                     config: function () {
@@ -233,7 +278,7 @@
                 }
             });
         }
-        
+
         function loadGooglePlace(id) {
             $.get("api/google/get/" + id, function (data) {
                 var tmpl = $.templates("#tmplmdShowGooglePlace");
@@ -247,6 +292,7 @@
             $.get("api/marca", function (data) {
                 let marcaPet;
                 marcaPet = data;
+                console.log(marcaPet);
                 for (var i = 0; i < marcaPet.length; i++) {
                     let marker = L.marker(new L.LatLng(marcaPet[i].cord[0], marcaPet[i].cord[1]), { title: marcaPet[i].nome, icon: petIcon });
                     marker.attribution = marcaPet[i].id;
@@ -270,7 +316,7 @@
                     markers.addLayer(marker);
                 }
             });
-            
+
 			return false;
 		}
 
@@ -349,6 +395,12 @@
 
         function perdiMeuPet() {
             if (objectFb.getLoginStatus === 'connected') {
+
+
+                    $("#hiddenuseremail").val(userObject.email);
+                    $("#hiddenusername").val(userObject.name);
+                    $("#hiddenuserid").val(userObject.id);
+
                 $('#mdLostpet').modal();
             } else if (objectFb.getLoginStatus === 'not_authorized') {
                     alert('Você ainda não Autorizou o nosso Sistema !!');
@@ -357,8 +409,8 @@
                 }
         }
 
-        
-      
+
+
 
         function salvaLostPet() {
             $.postJSON("api/pet", JSON.stringify($("#frmLostPet").serializeObject()));
@@ -425,20 +477,21 @@
 
         }
 
-        function loginFb() {
-
+        function autorizaLoginFb() {
             FB.login(function (response) {
-                
                 if (response.authResponse) {
+
+
+                    //$.postJSON("api/facebook/user", response );
+
+
 
                     console.log(response);
 
                 } else {
                     alert('O usuário cancelou o login ou não autorizou.');
                 }
-
                 objectFb.getLoginStatus = response.status;
-
             });
         };
 
@@ -474,10 +527,10 @@
 
             };
 
-            
+
 
         });
-        
+
     </script>
 
 
@@ -509,16 +562,11 @@
             <div class="modal-body">
                 <div class="card">
                     
-
-
-                    {{if imagem.lenght == 0}}
+                    {{if imagem}}
                     <img class="card-img-top img-rounded img-responsive" src="{{:imagem}}" alt="{{:nome}}">
                     {{else}}
                     <img class="card-img-top img-rounded img-responsive" src="/images/petDefault.jpg" alt="{{:nome}}">
                     {{/if}}
-
-
-
 
                     <div class="card-block">
                         <h4 class="card-title">Procura-se : {{:nome}}</h4>
@@ -588,70 +636,78 @@
     </div>
 
     @*mdLostpet Modal*@
-    <div class="modal fade" tabindex="-1" role="dialog" id="mdLostpet">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title">Perdi meu Pet !!! </h4>
-                </div>
-                <div class="modal-body">
+<div class="modal fade" tabindex="-1" role="dialog" id="mdLostpet">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Perdi meu Pet !!! </h4>
+            </div>
+            <div class="modal-body">
 
-                    <form class="form-horizontal" id="frmLostPet">
-                        <div class="form-group">
-                            <label for="tbNome" class="col-sm-4 control-label">Atende pelo nome </label>
-                            <div class="col-sm-8">
-                                <input type="text" class="form-control" name="nome">
-                                <span class="help-block">Qual o nome do seu pet ?</span>
-                            </div>
-                        </div>
+                <form class="form-horizontal" id="frmLostPet">
+                    <input id="gmapPetPosition" name="localizacao" type="hidden">
+                    <input id="hiddenuseremail" name="useremail" type="hidden">
+                    <input id="hiddenusername" name="username" type="hidden">
+                    <input id="hiddenuserid" name="userid" type="hidden">
 
-                        <div class="form-group">
-                            <label for="comment" class="col-sm-4 control-label">Descrição:</label>
-                            <div class="col-sm-8">
-                                <textarea class="form-control" rows="5" name="descricao"></textarea>
-                                <span class="help-block">Descreva o seu pet, fale das cores, se estava com o pelo aparado ou não, estilo do rabo ou orelhas cortadas.</span>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="tbNome" class="col-sm-4 control-label">Telefone de contato</label>
-                            <div class="col-sm-8">
-                                <input type="text" class="form-control" name="contatos">
-                                <span class="help-block">Coloque um número do whatsapp para facilitar o contato !</span>
-                            </div>
-                        </div>
 
-                        <div class="form-group">
-                            <label for="tbNome" class="col-sm-4 control-label">Foto do seu querido</label>
-                            <div class="col-sm-8">
-                                <a class='btn btn-primary' href='javascript:;'>
-                                    Escolha o arquivo...
-                                    <input type="file" style='position:absolute;z-index:2;top:0;left:0;filter: alpha(opacity=0);-ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";opacity:0;background-color:transparent;color:transparent;' name="mdLostpetFoto" id="mdLostpetFoto" size="40" @*onchange='$("#upload-file-info").html($(this).val().split("\\")[2]); atualizaFotoPet();'*@>
-                                </a>
-                                &nbsp;
-                                <span class='label label-info' id="upload-file-info"></span>
-                            </div>
+                    <div class="form-group">
+                        <label for="tbNome" class="col-sm-4 control-label">Atende pelo nome </label>
+                        <div class="col-sm-8">
+                            <input type="text" class="form-control" name="nome">
+                            <span class="help-block">Qual o nome do seu pet ?</span>
                         </div>
+                    </div>
 
-                        <div class="form-group" id="imgLostPet">
-                            <input id="imgLostPetValue" name="imagem" type="hidden">
-                            <img class="card-img-top img-rounded img-responsive" src="" />
+                    <div class="form-group">
+                        <label for="comment" class="col-sm-4 control-label">Descrição:</label>
+                        <div class="col-sm-8">
+                            <textarea class="form-control" rows="5" name="descricao"></textarea>
+                            <span class="help-block">Descreva o seu pet, fale das cores, se estava com o pelo aparado ou não, estilo do rabo ou orelhas cortadas.</span>
                         </div>
-
-                        <div class="form-group">
-                            <label for="tbNome" class="col-sm-4">Localização</label>
-                            <div class="col-sm-12">
-                                <input id="gmapPetPosition" name="localizacao" type="hidden">
-                                <div id="Gmap-canvas" style="width:550px;height:300px"> </div>
-                                <span class="help-block">Posicione a marcação no mapa na região que o seu pet sumiu. Não coloque em cima da sua residencia, coloque a marcação nas ruas ;).</span>
-                            </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="tbNome" class="col-sm-4 control-label">Telefone de contato</label>
+                        <div class="col-sm-8">
+                            <input type="text" class="form-control" name="contatos">
+                            <span class="help-block">Coloque um número do whatsapp para facilitar o contato !</span>
                         </div>
-                    </form>
+                    </div>
 
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-primary" onclick="salvaLostPet()">Savar</button>
-                </div>
+                    <div class="form-group">
+                        <label for="tbNome" class="col-sm-4 control-label">Foto do seu querido</label>
+                        <div class="col-sm-8">
+                            <a class='btn btn-primary' href='javascript:;'>
+                                Escolha o arquivo...
+                                <input type="file" style='position:absolute;z-index:2;top:0;left:0;filter: alpha(opacity=0);-ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";opacity:0;background-color:transparent;color:transparent;' name="mdLostpetFoto" id="mdLostpetFoto" size="40" onchange='$("#upload-file-info").html($(this).val().split("\\")[2]); atualizaFotoPet();'>
+                            </a>
+                            &nbsp;
+                            <span class='label label-info' id="upload-file-info"></span>
+                        </div>
+                    </div>
+
+                    <div class="form-group" id="imgLostPet">
+                        <input id="imgLostPetValue" name="imagem" type="hidden">
+                        <img class="card-img-top img-rounded img-responsive" src="" />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="tbNome" class="col-sm-4">Localização</label>
+                        <div class="col-sm-12">
+
+                            <div id="Gmap-canvas" style="width:550px;height:300px"> </div>
+                            <span class="help-block">Posicione a marcação no mapa na região que o seu pet sumiu. Não coloque em cima da sua residencia, coloque a marcação nas ruas ;).</span>
+                        </div>
+                    </div>
+                </form>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" onclick="salvaLostPet()">Savar</button>
             </div>
         </div>
     </div>
+</div>
+
+

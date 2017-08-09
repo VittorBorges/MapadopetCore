@@ -18,7 +18,10 @@ namespace MapadopetCore.Models
         //public DateTime CreatedOn { get; set; } = DateTime.Now;
         public string UpdatedOn { get; set; }
         public string CreatedOn { get; set; }
-        public int UserId { get; set; } = 0;
-        
+        public string userid { get; set; } 
+        public string username { get; set; }
+        public string useremail { get; set; }
+
+
     }
 }

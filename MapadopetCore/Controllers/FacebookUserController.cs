@@ -12,11 +12,11 @@ namespace MapadopetCore.Controllers
 {
     [Produces("application/json")]
     [Route("api/[controller]")]
-    public class FacebookUserController : Controller
+    public class FacebookController : Controller
     {
         private readonly IFacebookUserRepository _FacebookUserRepository;
 
-        public FacebookUserController(IFacebookUserRepository facebookUserRepository)
+        public FacebookController(IFacebookUserRepository facebookUserRepository)
         {
             _FacebookUserRepository = facebookUserRepository;
         }
@@ -43,13 +43,19 @@ namespace MapadopetCore.Controllers
         {
             return await _FacebookUserRepository.GetFacebookUser(id) ?? new FacebookUser();
         }
-           
+
         [HttpPost]
         public void Post([FromBody] FacebookUser value)
         {
             _FacebookUserRepository.AddFacebookUser(value);
         }
-        
+
+        [HttpPost]
+        public void User([FromBody] FacebookUser value)
+        {
+            _FacebookUserRepository.AddFacebookUser(value);
+        }
+
         [HttpPut("{id}")]
         public void Put(string id, [FromBody] FacebookUser value)
         {
