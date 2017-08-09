@@ -15,6 +15,7 @@
     <Content Include="wwwroot\images\contextMenuCentro.png" />
     <Content Include="wwwroot\images\contextMenuPet.png" />
     <Content Include="wwwroot\images\contextMenuVisto.png" />
+    <Content Include="wwwroot\images\dogEsperando.jpg" />
     <Content Include="wwwroot\images\logoMenu.png" />
     <Content Include="wwwroot\images\zoom-in.png" />
     <Content Include="wwwroot\images\zoom-out.png" />

@@ -9,7 +9,7 @@
       "wwwroot/css/MarkerCluster.css",
       "wwwroot/css/MarkerCluster.Default.css",
       "wwwroot/css/leaflet.groupedlayercontrol.css",
-      "wwwroot/css/leaflet.contextmenu.css",
+      "wwwroot/css/leaflet.contextmenu.min.css",
       "wwwroot/css/site.css",
       "wwwroot/css/fb.css"
     ]
@@ -19,6 +19,7 @@
     "inputFiles": [
       "wwwroot/js/leaflet.markercluster-src.js",
       "wwwroot/js/leaflet.groupedlayercontrol.js",
+      "wwwroot/js/leaflet.contextmenu.min.js",
       "wwwroot/js/icons.js",
       "wwwroot/js/object-observe-lite.min.js",
       "wwwroot/js/jsrender.min.js"

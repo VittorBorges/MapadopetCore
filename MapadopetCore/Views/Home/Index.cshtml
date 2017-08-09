@@ -117,11 +117,18 @@
 
         function menuPetAbandonado(e) {
             // console.log(e);
+
+            //$("#mapaLostpet").appendTo("#Gmap-canvas");
+
+            //<input type="hidden" name="mapaLostpet" />
+            //<div id="Gmap-canvas" style="width:550px;height:300px"> </div>
+
+
             Gmap.setCenter(e.latlng);
             Gmap.setZoom(17);
             clearGMarkers();
             addGMarker(e.latlng);
-            perdiMeuPet();
+            petAbandonado();
         }
 
         function menuPetAdocao(e) {
@@ -130,7 +137,7 @@
             Gmap.setZoom(17);
             clearGMarkers();
             addGMarker(e.latlng);
-            perdiMeuPet();
+            petAdocao();
         }
 
 
@@ -397,20 +404,52 @@
             if (objectFb.getLoginStatus === 'connected') {
 
 
-                    $("#hiddenuseremail").val(userObject.email);
-                    $("#hiddenusername").val(userObject.name);
-                    $("#hiddenuserid").val(userObject.id);
+                $("#hiddenuseremail").val(userObject.email);
+                $("#hiddenusername").val(userObject.name);
+                $("#hiddenuserid").val(userObject.id);
+                
 
                 $('#mdLostpet').modal();
             } else if (objectFb.getLoginStatus === 'not_authorized') {
-                    alert('Você ainda não Autorizou o nosso Sistema !!');
-                } else {
-                    alert('Não Conectado ao Facebook');
-                }
+                alert('Você ainda não Autorizou o nosso Sistema !!');
+            } else {
+                alert('Não Conectado ao Facebook');
+            }
         }
 
+        function petAbandonado() {
+            if (objectFb.getLoginStatus === 'connected') {
 
 
+                $("#hiddenuseremail").val(userObject.email);
+                $("#hiddenusername").val(userObject.name);
+                $("#hiddenuserid").val(userObject.id);
+
+                $('#mdPetAbandonado').modal();
+            } else if (objectFb.getLoginStatus === 'not_authorized') {
+                alert('Você ainda não Autorizou o nosso Sistema !!');
+            } else {
+                alert('Não Conectado ao Facebook');
+            }
+        }
+
+        function petAdocao() {
+            if (objectFb.getLoginStatus === 'connected') {
+
+
+                $("#hiddenuseremail").val(userObject.email);
+                $("#hiddenusername").val(userObject.name);
+                $("#hiddenuserid").val(userObject.id);
+
+                $('#mdPetAdocao').modal();
+            } else if (objectFb.getLoginStatus === 'not_authorized') {
+                alert('Você ainda não Autorizou o nosso Sistema !!');
+            } else {
+                alert('Não Conectado ao Facebook');
+            }
+        }
+
+        
 
         function salvaLostPet() {
             $.postJSON("api/pet", JSON.stringify($("#frmLostPet").serializeObject()));
@@ -495,8 +534,43 @@
             });
         };
 
+        function btnEntrar() {
+
+            if ($("#naoMostrarInicio").prop('checked')) {
+                setCookie('nmi', 1, 10);
+            }
+                     
+        }
+
+        function setCookie(cname, cvalue, exdays) {
+            var d = new Date();
+            d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
+            var expires = "expires=" + d.toUTCString();
+            document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+        }
+
+        function getCookie(cname) {
+            var name = cname + "=";
+            var decodedCookie = decodeURIComponent(document.cookie);
+            var ca = decodedCookie.split(';');
+            for (var i = 0; i < ca.length; i++) {
+                var c = ca[i];
+                while (c.charAt(0) == ' ') {
+                    c = c.substring(1);
+                }
+                if (c.indexOf(name) == 0) {
+                    return c.substring(name.length, c.length);
+                }
+            }
+            return "";
+        }
+
         //Inicio do loading
         $(function () {
+
+
+            if(getCookie('nmi')!="1")
+            $('#msgModal').modal();
 
             populate();
             map.addLayer(markers);
@@ -534,7 +608,7 @@
     </script>
 
 
-@*mdMensagemInicial*@
+    @*mdMensagemInicial*@
     <div class="modal fade" tabindex="-1" role="dialog" id="msgModal">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
@@ -543,16 +617,36 @@
                     <h4 class="modal-title">Mapa do Pet</h4>
                 </div>
                 <div class="modal-body">
-                    <p>Bem vindo ao Mapa do Pet, aqui vamos apresentar os 'Pets' abandonados, perdidos ou para ado&ccedil;&atilde;o.</p>
+                    <div class="row">
+                        <div class="col-sm-12 col-md-4 col-lg-4">
+                            <img src="~/images/dogEsperando.jpg" alt="Mapa do Pet" />
+                        </div>
+                        <div class="col-sm-12 col-md-8 col-lg-8"> 
+                            <h1 class="display-3">
+                                Bem vindo ao Mapa do Pet !
+                            </h1>
+                            <p class="lead">
+                                Vamos apresentar um mapa com os 'Pets' abandonados, perdidos ou para ado&ccedil;&atilde;o, colabore !!!
+                            </p>
+                            <div class="btn-group btn-group-lg" role="group" aria-label="...">
+                                <button type="button" class="btn btn-primary " data-dismiss="modal" onclick="btnEntrar();">Entrar</button>
+                                <button type="button" class="btn btn-primary " data-dismiss="modal">Como funciona <span class="glyphicon glyphicon-question-sign" aria-hidden="true"></span></button>
+                            </div>
+                            <div>
+                                <input id="naoMostrarInicio" type="checkbox" aria-label="..."> não mostrar mais esta janela.
+                            </div>
+                            
+                        </div>
+                    </div>
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Entrar</button>
-                </div>
+        @*<div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Entrar</button>
+        </div>*@
             </div>
         </div>
     </div>
 
-@*mdShowPet Modal*@
+    @*mdShowPet Modal*@
     <script id="tmplmdShowPet" type="text/x-jsrender">
         <div class="modal-content">
             <div class="modal-header">
@@ -597,37 +691,37 @@
     <p>${restOfVariables}</p>
 </script>
 
-@*mdShowGooglePlace Modal*@
-<script id="tmplmdShowGooglePlace" type="text/x-jsrender">
-    <div class="modal-content">
-        @*<div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-            <h4 class="modal-title">Local Relacionado</h4>
-        </div>*@
-        <div class="modal-body">
-            <div class="card">
-                <div class="text-center">
+    @*mdShowGooglePlace Modal*@
+    <script id="tmplmdShowGooglePlace" type="text/x-jsrender">
+        <div class="modal-content">
+            @*<div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Local Relacionado</h4>
+            </div>*@
+            <div class="modal-body">
+                <div class="card">
+                    <div class="text-center">
 
-                    {{if photos != null }}
-                    <img class="card-img-top img-rounded img-responsive" style="width:300px" src="{{:img}}" alt="{{:name}}">
-                    {{else}}
-                    <img class="card-img-top img-rounded img-responsive"  src="/images/petshopDefault.jpg" alt="">
-                    {{/if}}
+                        {{if photos != null }}
+                        <img class="card-img-top img-rounded img-responsive" style="width:300px" src="{{:img}}" alt="{{:name}}">
+                        {{else}}
+                        <img class="card-img-top img-rounded img-responsive"  src="/images/petshopDefault.jpg" alt="">
+                        {{/if}}
 
-                </div>
-                <div class="card-block">
-                    <h4 class="card-title">{{:name}}</h4>
-                    <p class="card-text">
+                    </div>
+                    <div class="card-block">
+                        <h4 class="card-title">{{:name}}</h4>
+                        <p class="card-text">
                         
-                        <address>{{:vicinity}}</address>
+                            <address>{{:vicinity}}</address>
 
-                    <span class="label label-inverse" style="z-index: -1;padding: 10px;background-color:cornflowerblue; width:100px"> 63 - 3212100 </span>
-                    <span onclick="$(this).hide()" class="label label-info" style="position: relative; z-index: 100; left: -80px; padding: 10px; background-color:crimson;width:100px ">VER TELEFONE</span>
+                        <span class="label label-inverse" style="z-index: -1;padding: 10px;background-color:cornflowerblue; width:100px"> 63 - 3212100 </span>
+                        <span onclick="$(this).hide()" class="label label-info" style="position: relative; z-index: 100; left: -80px; padding: 10px; background-color:crimson;width:100px ">VER TELEFONE</span>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-</script>
+    </script>
 
     <div class="modal fade" tabindex="-1" role="dialog" id="mdShowGooglePlace">
         <div class="modal-dialog" role="document" id="mdShowGooglePlaceContent">
@@ -635,13 +729,90 @@
         </div>
     </div>
 
-    @*mdLostpet Modal*@
+@*mdLostpet Modal*@
 <div class="modal fade" tabindex="-1" role="dialog" id="mdLostpet">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                 <h4 class="modal-title">Perdi meu Pet !!! </h4>
+            </div>
+            <div class="modal-body">
+
+                <form class="form-horizontal" id="frmLostPet">
+                    <input id="gmapPetPosition" name="localizacao" type="hidden">
+                    <input id="hiddenuseremail" name="useremail" type="hidden">
+                    <input id="hiddenusername" name="username" type="hidden">
+                    <input id="hiddenuserid" name="userid" type="hidden">
+
+
+                    <div class="form-group">
+                        <label for="tbNome" class="col-sm-4 control-label">Atende pelo nome </label>
+                        <div class="col-sm-8">
+                            <input type="text" class="form-control" name="nome">
+                            <span class="help-block">Qual o nome do seu pet ?</span>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="comment" class="col-sm-4 control-label">Descrição:</label>
+                        <div class="col-sm-8">
+                            <textarea class="form-control" rows="5" name="descricao"></textarea>
+                            <span class="help-block">Descreva o seu pet, fale das cores, se estava com o pelo aparado ou não, estilo do rabo ou orelhas cortadas.</span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="tbNome" class="col-sm-4 control-label">Telefone de contato</label>
+                        <div class="col-sm-8">
+                            <input type="text" class="form-control" name="contatos">
+                            <span class="help-block">Coloque um número do whatsapp para facilitar o contato !</span>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="tbNome" class="col-sm-4 control-label">Foto do seu querido</label>
+                        <div class="col-sm-8">
+                            <a class='btn btn-primary' href='javascript:;'>
+                                Escolha o arquivo...
+                                <input type="file" style='position:absolute;z-index:2;top:0;left:0;filter: alpha(opacity=0);-ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";opacity:0;background-color:transparent;color:transparent;' name="mdLostpetFoto" id="mdLostpetFoto" size="40" onchange='$("#upload-file-info").html($(this).val().split("\\")[2]); atualizaFotoPet();'>
+                            </a>
+                            &nbsp;
+                            <span class='label label-info' id="upload-file-info"></span>
+                        </div>
+                    </div>
+
+                    <div class="form-group" id="imgLostPet">
+                        <input id="imgLostPetValue" name="imagem" type="hidden">
+                        <img class="card-img-top img-rounded img-responsive" src="" />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="tbNome" class="col-sm-4">Localização</label>
+                        <div class="col-sm-12">
+                            <input type="hidden" id="mapaLostpet" />
+                            
+                            <div id="Gmap-canvas" style="width:550px;height:300px"> </div>
+
+                            <span class="help-block">Posicione a marcação no mapa na região que o seu pet sumiu. Não coloque em cima da sua residencia, coloque a marcação nas ruas ;).</span>
+                        </div>
+                    </div>
+                </form>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" onclick="salvaLostPet()">Savar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@*mdPetAbandonado Modal*@
+<div class="modal fade" tabindex="-1" role="dialog" id="mdPetAbandonado">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Pet Abandonado </h4>
             </div>
             <div class="modal-body">
 
@@ -709,5 +880,83 @@
         </div>
     </div>
 </div>
+
+@*mdPetAdocao Modal*@
+<div class="modal fade" tabindex="-1" role="dialog" id="mdPetAdocao">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Pet Abandonado </h4>
+            </div>
+            <div class="modal-body">
+
+                <form class="form-horizontal" id="frmLostPet">
+                    <input id="gmapPetPosition" name="localizacao" type="hidden">
+                    <input id="hiddenuseremail" name="useremail" type="hidden">
+                    <input id="hiddenusername" name="username" type="hidden">
+                    <input id="hiddenuserid" name="userid" type="hidden">
+
+
+                    <div class="form-group">
+                        <label for="tbNome" class="col-sm-4 control-label">Atende pelo nome </label>
+                        <div class="col-sm-8">
+                            <input type="text" class="form-control" name="nome">
+                            <span class="help-block">Qual o nome do seu pet ?</span>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="comment" class="col-sm-4 control-label">Descrição:</label>
+                        <div class="col-sm-8">
+                            <textarea class="form-control" rows="5" name="descricao"></textarea>
+                            <span class="help-block">Descreva o seu pet, fale das cores, se estava com o pelo aparado ou não, estilo do rabo ou orelhas cortadas.</span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="tbNome" class="col-sm-4 control-label">Telefone de contato</label>
+                        <div class="col-sm-8">
+                            <input type="text" class="form-control" name="contatos">
+                            <span class="help-block">Coloque um número do whatsapp para facilitar o contato !</span>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="tbNome" class="col-sm-4 control-label">Foto do seu querido</label>
+                        <div class="col-sm-8">
+                            <a class='btn btn-primary' href='javascript:;'>
+                                Escolha o arquivo...
+                                <input type="file" style='position:absolute;z-index:2;top:0;left:0;filter: alpha(opacity=0);-ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";opacity:0;background-color:transparent;color:transparent;' name="mdLostpetFoto" id="mdLostpetFoto" size="40" onchange='$("#upload-file-info").html($(this).val().split("\\")[2]); atualizaFotoPet();'>
+                            </a>
+                            &nbsp;
+                            <span class='label label-info' id="upload-file-info"></span>
+                        </div>
+                    </div>
+
+                    <div class="form-group" id="imgLostPet">
+                        <input id="imgLostPetValue" name="imagem" type="hidden">
+                        <img class="card-img-top img-rounded img-responsive" src="" />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="tbNome" class="col-sm-4">Localização</label>
+                        <div class="col-sm-12">
+
+                            <div id="Gmap-canvas" style="width:550px;height:300px"> </div>
+                            <span class="help-block">Posicione a marcação no mapa na região que o seu pet sumiu. Não coloque em cima da sua residencia, coloque a marcação nas ruas ;).</span>
+                        </div>
+                    </div>
+                </form>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" onclick="salvaLostPet()">Savar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+    
 
 
