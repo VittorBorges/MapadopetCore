@@ -17,6 +17,8 @@
         <script src="~/js/icons.js"></script>
         <script src="~/js/jsrender.min.js"></script>
         <script src="~/js/object-observe-lite.min.js"></script>
+        <script src="~/js/config/modalHome.js"></script>
+
         <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&signed_in=true&key=AIzaSyBukZCOlWSgvLS-s7mPA5JQcL3uD6eRq84"></script>
 
     </environment>
@@ -139,7 +141,6 @@
             addGMarker(e.latlng);
             petAdocao();
         }
-
 
         function menuCentralizar(e) {
             map.panTo(e.latlng);
@@ -407,9 +408,9 @@
                 $("#hiddenuseremail").val(userObject.email);
                 $("#hiddenusername").val(userObject.name);
                 $("#hiddenuserid").val(userObject.id);
-                
+                configuraModal("inserir");
 
-                $('#mdLostpet').modal();
+                $('#mdInsertPet').modal();
             } else if (objectFb.getLoginStatus === 'not_authorized') {
                 alert('Você ainda não Autorizou o nosso Sistema !!');
             } else {
@@ -425,7 +426,7 @@
                 $("#hiddenusername").val(userObject.name);
                 $("#hiddenuserid").val(userObject.id);
 
-                $('#mdPetAbandonado').modal();
+                $('#mdInsertPet').modal();
             } else if (objectFb.getLoginStatus === 'not_authorized') {
                 alert('Você ainda não Autorizou o nosso Sistema !!');
             } else {
@@ -441,7 +442,7 @@
                 $("#hiddenusername").val(userObject.name);
                 $("#hiddenuserid").val(userObject.id);
 
-                $('#mdPetAdocao').modal();
+                $('#mdInsertPet').modal();
             } else if (objectFb.getLoginStatus === 'not_authorized') {
                 alert('Você ainda não Autorizou o nosso Sistema !!');
             } else {
@@ -457,7 +458,7 @@
         }
 
         function returnSalvaLostPet() {
-            $('#mdLostpet').modal('hide');
+            $('#mdInsertPet').modal('hide');
             alert('Seu pet vai ser adicionado ao mapa em instantes.');
             atualizaMapa();
             //Limpa o formulário de inserir pet
@@ -565,9 +566,36 @@
             return "";
         }
 
+        function configuraModal(nome) {
+
+            var jsonConfig ;
+
+            switch (nome) {
+                case "inserir":
+                jsonConfig = mdInserir;
+                    break;
+                
+            }
+
+            
+
+            jQuery.each(jsonConfig.labels, function () {
+                $("#" + this.n).text(this.v);
+            });
+
+            jQuery.each(jsonConfig.elementos, function () {
+                if (!this.v) {
+                    $("#" + this.n).css("display","none");
+                }
+                
+            });
+
+           
+        }
+
         //Inicio do loading
         $(function () {
-
+            
 
             if(getCookie('nmi')!="1")
             $('#msgModal').modal();
@@ -601,6 +629,8 @@
 
             };
 
+
+            $("body").on("contextmenu", my_selector, function () { return false; });
 
 
         });
@@ -730,7 +760,7 @@
     </div>
 
 @*mdLostpet Modal*@
-<div class="modal fade" tabindex="-1" role="dialog" id="mdLostpet">
+@*<div class="modal fade" tabindex="-1" role="dialog" id="mdLostpet">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -790,7 +820,85 @@
                         <label for="tbNome" class="col-sm-4">Localização</label>
                         <div class="col-sm-12">
                             <input type="hidden" id="mapaLostpet" />
-                            
+
+                            <div id="Gmap-canvas" style="width:550px;height:300px"> </div>
+
+                            <span class="help-block">Posicione a marcação no mapa na região que o seu pet sumiu. Não coloque em cima da sua residencia, coloque a marcação nas ruas ;).</span>
+                        </div>
+                    </div>
+                </form>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" onclick="salvaLostPet()">Savar</button>
+            </div>
+        </div>
+    </div>
+</div>*@
+
+
+@*mdInsertPet Modal*@
+<div class="modal fade" tabindex="-1" role="dialog" id="mdInsertPet">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="mdNome"></h4>
+            </div>
+            <div class="modal-body">
+
+                <form class="form-horizontal" id="frmLostPet">
+                    <input id="gmapPetPosition" name="localizacao" type="hidden">
+                    <input id="hiddenuseremail" name="useremail" type="hidden">
+                    <input id="hiddenusername" name="username" type="hidden">
+                    <input id="hiddenuserid" name="userid" type="hidden">
+
+
+                    <div class="form-group" id="rowPetNome">
+                        <label for="tbNome" class="col-sm-4 control-label" id="mdPetNome"></label>
+                        <div class="col-sm-8">
+                            <input type="text" class="form-control" name="nome">
+                            <span class="help-block" id="mdPetNomeHelp"></span>
+                        </div>
+                    </div>
+
+                    <div class="form-group" id="rowPetDescricao">
+                        <label for="comment" class="col-sm-4 control-label" id="mdPetDescricao"></label>
+                        <div class="col-sm-8">
+                            <textarea class="form-control" rows="5" name="descricao"></textarea>
+                            <span class="help-block" id="mdPetDescricaoHelp"></span>
+                        </div>
+                    </div>
+                    <div class="form-group" id="rowPetTelefone">
+                        <label for="tbNome" class="col-sm-4 control-label" id="mdPetTelefone"></label>
+                        <div class="col-sm-8">
+                            <input type="text" class="form-control" name="contatos">
+                            <span class="help-block" id="mdPetTelefoneHelp"></span>
+                        </div>
+                    </div>
+
+                    <div class="form-group" id="rowPetFoto">
+                        <label for="tbNome" class="col-sm-4 control-label" id="mdPetFoto"></label>
+                        <div class="col-sm-8">
+                            <a class='btn btn-primary' href='javascript:;'>
+                                <span id="mdPetFotoHelp"></span>
+                                <input type="file" style='position:absolute;z-index:2;top:0;left:0;filter: alpha(opacity=0);-ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";opacity:0;background-color:transparent;color:transparent;' name="mdLostpetFoto" id="mdLostpetFoto" size="40" onchange='$("#upload-file-info").html($(this).val().split("\\")[2]); atualizaFotoPet();'>
+                            </a>
+                            &nbsp;
+                            <span class='label label-info' id="upload-file-info"></span>
+                        </div>
+                    </div>
+
+                    <div class="form-group" id="imgLostPet">
+                        <input id="imgLostPetValue" name="imagem" type="hidden">
+                        <img class="card-img-top img-rounded img-responsive" src="" />
+                    </div>
+
+                    <div class="form-group" id="rowPetLocal">
+                        <label for="tbNome" class="col-sm-4">Localização</label>
+                        <div class="col-sm-12">
+                            <input type="hidden" id="mapaLostpet" />
+
                             <div id="Gmap-canvas" style="width:550px;height:300px"> </div>
 
                             <span class="help-block">Posicione a marcação no mapa na região que o seu pet sumiu. Não coloque em cima da sua residencia, coloque a marcação nas ruas ;).</span>
