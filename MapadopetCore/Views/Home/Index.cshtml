@@ -93,7 +93,9 @@
                 text: 'Zoom out',
                 icon: 'images/zoom-out.png',
                 callback: zoomOut
-            }] });
+                }]
+        });
+
         var markers = new L.MarkerClusterGroup();
         var markersList = [];
         var Gmap;
@@ -109,11 +111,23 @@
         }
 
         function menuLostPet(e) {
-           // console.log(e);
+            console.log(e);
             Gmap.setCenter(e.latlng);
             Gmap.setZoom(17);
             clearGMarkers();
             addGMarker(e.latlng);
+            //saveData(Gmap, e);
+            
+            //var zoomLevel = Gmap.getZoom();
+            var pos = (e.latlng).toString();
+            pos = pos.replace('(', '');
+            pos = pos.replace(')', '');
+            pos = pos.replace(' ', '');
+            pos = pos.replace('LatLng', '');
+
+            
+            $('#gmapPetPosition').val(pos);
+
             perdiMeuPet();
         }
 
@@ -403,13 +417,10 @@
 
         function perdiMeuPet() {
             if (objectFb.getLoginStatus === 'connected') {
-
-
                 $("#hiddenuseremail").val(userObject.email);
                 $("#hiddenusername").val(userObject.name);
                 $("#hiddenuserid").val(userObject.id);
                 configuraModal("inserir");
-
                 $('#mdInsertPet').modal();
             } else if (objectFb.getLoginStatus === 'not_authorized') {
                 alert('Você ainda não Autorizou o nosso Sistema !!');
@@ -420,12 +431,10 @@
 
         function petAbandonado() {
             if (objectFb.getLoginStatus === 'connected') {
-
-
                 $("#hiddenuseremail").val(userObject.email);
                 $("#hiddenusername").val(userObject.name);
                 $("#hiddenuserid").val(userObject.id);
-
+                configuraModal("abandonado");
                 $('#mdInsertPet').modal();
             } else if (objectFb.getLoginStatus === 'not_authorized') {
                 alert('Você ainda não Autorizou o nosso Sistema !!');
@@ -436,12 +445,10 @@
 
         function petAdocao() {
             if (objectFb.getLoginStatus === 'connected') {
-
-
                 $("#hiddenuseremail").val(userObject.email);
                 $("#hiddenusername").val(userObject.name);
                 $("#hiddenuserid").val(userObject.id);
-
+                configuraModal("adocao");
                 $('#mdInsertPet').modal();
             } else if (objectFb.getLoginStatus === 'not_authorized') {
                 alert('Você ainda não Autorizou o nosso Sistema !!');
@@ -449,8 +456,6 @@
                 alert('Não Conectado ao Facebook');
             }
         }
-
-        
 
         function salvaLostPet() {
             $.postJSON("api/pet", JSON.stringify($("#frmLostPet").serializeObject()));
@@ -572,7 +577,17 @@
 
             switch (nome) {
                 case "inserir":
-                jsonConfig = mdInserir;
+                    jsonConfig = mdInserirPerdiMeuPet;
+
+                    $("#mdInsertPetSalvar").unbind("click");
+                    $("#mdInsertPetSalvar").click(salvaLostPet);
+
+                    break;
+                case "abandonado":
+                    jsonConfig = mdInserirAbandonado;
+                    break;
+                case "adocao":
+                    jsonConfig = mdInserirAdocao;
                     break;
                 
             }
@@ -608,7 +623,7 @@
 
             initializeGMap();
 
-            $('#mdLostpet').on('shown.bs.modal', function () {
+            $('#mdInsertPet').on('shown.bs.modal', function () {
                 google.maps.event.trigger(Gmap, "resize");
             });
 
@@ -630,7 +645,7 @@
             };
 
 
-            $("body").on("contextmenu", my_selector, function () { return false; });
+          //  $("body").on("contextmenu", my_selector, function () { return false; });
 
 
         });
@@ -908,162 +923,11 @@
 
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary" onclick="salvaLostPet()">Savar</button>
+                <button type="button" class="btn btn-primary" id="mdInsertPetSalvar">Savar</button>
             </div>
         </div>
     </div>
 </div>
-
-@*mdPetAbandonado Modal*@
-<div class="modal fade" tabindex="-1" role="dialog" id="mdPetAbandonado">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title">Pet Abandonado </h4>
-            </div>
-            <div class="modal-body">
-
-                <form class="form-horizontal" id="frmLostPet">
-                    <input id="gmapPetPosition" name="localizacao" type="hidden">
-                    <input id="hiddenuseremail" name="useremail" type="hidden">
-                    <input id="hiddenusername" name="username" type="hidden">
-                    <input id="hiddenuserid" name="userid" type="hidden">
-
-
-                    <div class="form-group">
-                        <label for="tbNome" class="col-sm-4 control-label">Atende pelo nome </label>
-                        <div class="col-sm-8">
-                            <input type="text" class="form-control" name="nome">
-                            <span class="help-block">Qual o nome do seu pet ?</span>
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="comment" class="col-sm-4 control-label">Descrição:</label>
-                        <div class="col-sm-8">
-                            <textarea class="form-control" rows="5" name="descricao"></textarea>
-                            <span class="help-block">Descreva o seu pet, fale das cores, se estava com o pelo aparado ou não, estilo do rabo ou orelhas cortadas.</span>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label for="tbNome" class="col-sm-4 control-label">Telefone de contato</label>
-                        <div class="col-sm-8">
-                            <input type="text" class="form-control" name="contatos">
-                            <span class="help-block">Coloque um número do whatsapp para facilitar o contato !</span>
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="tbNome" class="col-sm-4 control-label">Foto do seu querido</label>
-                        <div class="col-sm-8">
-                            <a class='btn btn-primary' href='javascript:;'>
-                                Escolha o arquivo...
-                                <input type="file" style='position:absolute;z-index:2;top:0;left:0;filter: alpha(opacity=0);-ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";opacity:0;background-color:transparent;color:transparent;' name="mdLostpetFoto" id="mdLostpetFoto" size="40" onchange='$("#upload-file-info").html($(this).val().split("\\")[2]); atualizaFotoPet();'>
-                            </a>
-                            &nbsp;
-                            <span class='label label-info' id="upload-file-info"></span>
-                        </div>
-                    </div>
-
-                    <div class="form-group" id="imgLostPet">
-                        <input id="imgLostPetValue" name="imagem" type="hidden">
-                        <img class="card-img-top img-rounded img-responsive" src="" />
-                    </div>
-
-                    <div class="form-group">
-                        <label for="tbNome" class="col-sm-4">Localização</label>
-                        <div class="col-sm-12">
-
-                            <div id="Gmap-canvas" style="width:550px;height:300px"> </div>
-                            <span class="help-block">Posicione a marcação no mapa na região que o seu pet sumiu. Não coloque em cima da sua residencia, coloque a marcação nas ruas ;).</span>
-                        </div>
-                    </div>
-                </form>
-
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-primary" onclick="salvaLostPet()">Savar</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-@*mdPetAdocao Modal*@
-<div class="modal fade" tabindex="-1" role="dialog" id="mdPetAdocao">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title">Pet Abandonado </h4>
-            </div>
-            <div class="modal-body">
-
-                <form class="form-horizontal" id="frmLostPet">
-                    <input id="gmapPetPosition" name="localizacao" type="hidden">
-                    <input id="hiddenuseremail" name="useremail" type="hidden">
-                    <input id="hiddenusername" name="username" type="hidden">
-                    <input id="hiddenuserid" name="userid" type="hidden">
-
-
-                    <div class="form-group">
-                        <label for="tbNome" class="col-sm-4 control-label">Atende pelo nome </label>
-                        <div class="col-sm-8">
-                            <input type="text" class="form-control" name="nome">
-                            <span class="help-block">Qual o nome do seu pet ?</span>
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="comment" class="col-sm-4 control-label">Descrição:</label>
-                        <div class="col-sm-8">
-                            <textarea class="form-control" rows="5" name="descricao"></textarea>
-                            <span class="help-block">Descreva o seu pet, fale das cores, se estava com o pelo aparado ou não, estilo do rabo ou orelhas cortadas.</span>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label for="tbNome" class="col-sm-4 control-label">Telefone de contato</label>
-                        <div class="col-sm-8">
-                            <input type="text" class="form-control" name="contatos">
-                            <span class="help-block">Coloque um número do whatsapp para facilitar o contato !</span>
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="tbNome" class="col-sm-4 control-label">Foto do seu querido</label>
-                        <div class="col-sm-8">
-                            <a class='btn btn-primary' href='javascript:;'>
-                                Escolha o arquivo...
-                                <input type="file" style='position:absolute;z-index:2;top:0;left:0;filter: alpha(opacity=0);-ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";opacity:0;background-color:transparent;color:transparent;' name="mdLostpetFoto" id="mdLostpetFoto" size="40" onchange='$("#upload-file-info").html($(this).val().split("\\")[2]); atualizaFotoPet();'>
-                            </a>
-                            &nbsp;
-                            <span class='label label-info' id="upload-file-info"></span>
-                        </div>
-                    </div>
-
-                    <div class="form-group" id="imgLostPet">
-                        <input id="imgLostPetValue" name="imagem" type="hidden">
-                        <img class="card-img-top img-rounded img-responsive" src="" />
-                    </div>
-
-                    <div class="form-group">
-                        <label for="tbNome" class="col-sm-4">Localização</label>
-                        <div class="col-sm-12">
-
-                            <div id="Gmap-canvas" style="width:550px;height:300px"> </div>
-                            <span class="help-block">Posicione a marcação no mapa na região que o seu pet sumiu. Não coloque em cima da sua residencia, coloque a marcação nas ruas ;).</span>
-                        </div>
-                    </div>
-                </form>
-
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-primary" onclick="salvaLostPet()">Savar</button>
-            </div>
-        </div>
-    </div>
-</div>
-
 
     
 
