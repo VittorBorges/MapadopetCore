@@ -10,7 +10,15 @@ namespace MapadopetCore.Controllers
     {
         public IActionResult Index()
         {
+
+            ViewData["ogImage"] = "http://www.mapadopet.com.br/images/imgCompartilhamento.jpg";
+
             return View();
+        }
+
+        public IActionResult Pet()
+        {
+            return View("index");
         }
 
         public IActionResult About()

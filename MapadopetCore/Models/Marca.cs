@@ -9,7 +9,7 @@ namespace MapadopetCore.Models
         [BsonId]
         public ObjectId _id { get; set; }
         public string nome { get; set; } = string.Empty;
-        public string tipo { get; set; } = string.Empty;
+        public int tipo { get; set; } = 0;
         //public DateTime UpdatedOn { get; set; } = DateTime.Now;
         //public DateTime CreatedOn { get; set; } = DateTime.Now;
         public string UpdatedOn { get; set; }
@@ -17,7 +17,25 @@ namespace MapadopetCore.Models
         public double[] cord { get; set; }
         public Pet pet { get; set; }
         public string id { get { return _id.ToString(); } }
+        //[BsonIgnore]
+        //public tipoMarca enumTipo { get {
+        //        //return EnumUtils.Parse<tipoMarca>(tipo.ToString()).Value ;
+        //        return tipoMarca  [tipo];
+        //    } 
 
+        //    set {
+        //        tipo = (int)value;
+        //    }
+        //} 
+        
 
     }
+
+    //public enum tipoMarca
+    //{
+    //    perdido,
+    //    adocao,
+    //    abandonado
+    //};
+
 }

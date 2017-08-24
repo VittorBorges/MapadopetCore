@@ -35,6 +35,7 @@ namespace MapadopetCore.Data
 
         public void AddPet(Pet item)
         {
+
             double[] loc = new double[2];
 
             if (item.localizacao != null && item.localizacao.Length > 0 && item.localizacao.Contains(","))
@@ -46,7 +47,7 @@ namespace MapadopetCore.Data
             Marca m = new Marca()
             {
                 nome = item.nome,
-                tipo = "pet",
+                tipo = item.tipo,
                 CreatedOn = DateTime.Now.ToString(),
                 cord = loc,
                 pet = item

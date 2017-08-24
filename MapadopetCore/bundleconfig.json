@@ -20,9 +20,11 @@
       "wwwroot/js/leaflet.markercluster-src.js",
       "wwwroot/js/leaflet.groupedlayercontrol.js",
       "wwwroot/js/leaflet.contextmenu.min.js",
+      "wwwroot/js/Util.js",
       "wwwroot/js/icons.js",
       "wwwroot/js/object-observe-lite.min.js",
-      "wwwroot/js/jsrender.min.js"
+      "wwwroot/js/jsrender.min.js",
+      "wwwroot/js/config/modalHome.js"
     ],
     // Optionally specify minification options
     "minify": {

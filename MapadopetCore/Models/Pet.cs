@@ -9,7 +9,7 @@ namespace MapadopetCore.Models
         [BsonId]
         public ObjectId _id { get; set; }
         public string nome { get; set; } = string.Empty;
-        public string tipo { get; set; } = string.Empty;
+        public int tipo { get; set; } 
         public string imagem { get; set; } = "images//petpopup1.jpg";
         public string descricao { get; set; } = string.Empty;
         public string contatos { get; set; } = string.Empty;

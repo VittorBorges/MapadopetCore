@@ -1,5 +1,5 @@
-var petIcon = L.icon({
-    iconUrl: 'images/petIcon.png',
+var petLostIcon = L.icon({
+    iconUrl: varHost + '/images/petIcon.png',
     //shadowUrl: 'images/sombrapet.png',
     iconSize: [40, 40], // size of the icon
     //shadowSize:   [64, 70], // size of the shadow
@@ -9,28 +9,28 @@ var petIcon = L.icon({
 });
 
 var userIcon = L.icon({
-    iconUrl: 'images/userM.png',
+    iconUrl: varHost + '/images/userM.png',
     iconSize: [40, 40], 
     iconAnchor: [20, 20],
     popupAnchor: [0, -20] 
 });
 
 var petShopIcon = L.icon({
-    iconUrl: 'images/petShopIcon.png',
+    iconUrl: varHost + '/images/petShopIcon.png',
     iconSize: [40, 40],
     iconAnchor: [20, 20],
     popupAnchor: [0, -20]
 });
 
 var petAdocaoIcon = L.icon({
-    iconUrl: 'images/petAdocaoIcon.png',
+    iconUrl: varHost + '/images/petAdocaoIcon.png',
     iconSize: [40, 40],
     iconAnchor: [20, 20],
     popupAnchor: [0, -20]
 });
 
-var petVistoIcon = L.icon({
-    iconUrl: 'images/petVistoIcon.png',
+var petAbandonadoIcon = L.icon({
+    iconUrl: varHost + '/images/petVistoIcon.png',
     iconSize: [40, 40],
     iconAnchor: [20, 20],
     popupAnchor: [0, -20]

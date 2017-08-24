@@ -16,12 +16,15 @@
     <Content Include="wwwroot\images\contextMenuPet.png" />
     <Content Include="wwwroot\images\contextMenuVisto.png" />
     <Content Include="wwwroot\images\dogEsperando.jpg" />
+    <Content Include="wwwroot\images\imgCompartilhamento.jpg" />
+    <Content Include="wwwroot\images\imgFacebook.jpg" />
     <Content Include="wwwroot\images\logoMenu.png" />
     <Content Include="wwwroot\images\zoom-in.png" />
     <Content Include="wwwroot\images\zoom-out.png" />
     <Content Include="wwwroot\js\config\modalHome.js" />
     <Content Include="wwwroot\js\leaflet.contextmenu.min.js" />
     <Content Include="wwwroot\js\object-observe-lite.min.js" />
+    <Content Include="wwwroot\js\Util.js" />
   </ItemGroup>
   <!--<ItemGroup>
     <Compile Remove="wwwroot\lib\**" />
