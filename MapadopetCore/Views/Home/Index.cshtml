@@ -299,7 +299,7 @@
         }
 
         function loadGooglePlace(id) {
-            $.get("/api/google/get/" + id, function (data) {
+            $.get(varHost + "/api/google/get/" + id, function (data) {
                 var tmpl = $.templates("#tmplmdShowGooglePlace");
                 var html = tmpl.render(data);
                 $("#mdShowGooglePlaceContent").html(html);
@@ -473,17 +473,17 @@
         }
 
         function salvaLostPet() {
-            $.postJSON("api/pet", JSON.stringify($("#frmLostPet").serializeObject()));
+            $.postJSON(varHost +"/api/pet", JSON.stringify($("#frmLostPet").serializeObject()));
             returnSalvaLostPet();
         }
 
         function salvaAbandonado() {
-            $.postJSON("api/pet", JSON.stringify($("#frmLostPet").serializeObject()));
+            $.postJSON(varHost +"/api/pet", JSON.stringify($("#frmLostPet").serializeObject()));
             returnSalvaLostPet();
         }
 
         function salvaAdocao() {
-            $.postJSON("api/pet", JSON.stringify($("#frmLostPet").serializeObject()));
+            $.postJSON(varHost +"/api/pet", JSON.stringify($("#frmLostPet").serializeObject()));
             returnSalvaLostPet();
         }
 
