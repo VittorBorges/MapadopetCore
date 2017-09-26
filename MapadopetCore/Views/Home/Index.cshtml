@@ -83,7 +83,7 @@
             accessToken: 'pk.eyJ1Ijoidml0dG9yIiwiYSI6ImNqMGRzc2l1MDAwazEycXVpYWg1NHpnM2YifQ.e2d9NQgefD9vl6B1lNiePA'
         });
 
-        
+
 
         var map = new L.Map('map', {
             center: posPin, zoom: 16, layers: [tiles], contextmenu: true,
@@ -100,12 +100,12 @@
                 text: 'Pet para adoção',
                 callback: menuPetAdocao,
                 icon: varHost + '/images/contextMenuAdocao.png',
-            }, 
-                '-',{
-                    text: 'Centralizar',
-                    callback: menuCentralizar,
-                    icon: varHost + '/images/contextMenuCentro.png',
-                }
+            },
+                '-', {
+                text: 'Centralizar',
+                callback: menuCentralizar,
+                icon: varHost + '/images/contextMenuCentro.png',
+            }
                 , {
                 text: 'Zoom in',
                 icon: varHost + '/images/zoom-in.png',
@@ -114,7 +114,7 @@
                 text: 'Zoom out',
                 icon: varHost + '/images/zoom-out.png',
                 callback: zoomOut
-                }]
+            }]
         });
 
         var markers = new L.MarkerClusterGroup();
@@ -131,8 +131,7 @@
             alert(e.latlng);
         }
 
-        function centerGMap(e)
-        {
+        function centerGMap(e) {
             Gmap.setCenter(e);
             Gmap.setZoom(17);
             clearGMarkers();
@@ -140,7 +139,7 @@
         }
 
         function menuLostPet(e) {
-            
+
             centerGMap(e.latlng);
 
             var pos = (e.latlng).toString();
@@ -154,7 +153,7 @@
         }
 
         function menuPetAbandonado(e) {
-            
+
             centerGMap(e.latlng);
 
             var pos = (e.latlng).toString();
@@ -228,10 +227,10 @@
         });
 
 
-        
+
         function getLocation() {
             if (navigator.geolocation) {
-               navigator.geolocation.getCurrentPosition(showPosition);
+                navigator.geolocation.getCurrentPosition(showPosition);
             } else {
                 alert('Você precisa autorizar o navegador para ser redirecionado no mapa automaticamente.');
             }
@@ -274,16 +273,16 @@
                         s.src = 'https://mapa-do-pet.disqus.com/embed.js';
                         s.setAttribute('data-timestamp', +new Date());
                         (d.head || d.body).appendChild(s);
-                            setTimeout(function () {
-                                DISQUS.reset({
-                                    reload: true,
-                                    config: function () {
-                                        this.page.url = "http://www.mapadopet.com.br/pet/" + id;
-                                        this.page.identifier = "showpet" + id;
-                                    }
-                                });
-                                $("#disqus_thread").show();
-                            }, 2500);
+                        setTimeout(function () {
+                            DISQUS.reset({
+                                reload: true,
+                                config: function () {
+                                    this.page.url = "http://www.mapadopet.com.br/pet/" + id;
+                                    this.page.identifier = "showpet" + id;
+                                }
+                            });
+                            $("#disqus_thread").show();
+                        }, 2500);
                     })();
                 } else {
 
@@ -336,7 +335,7 @@
             });
 
 
-            $.get(varHost +"/api/google/GetPlaces", { "lat": map.getCenter().lat, "lng": map.getCenter().lng }).done(function (data) {
+            $.get(varHost + "/api/google/GetPlaces", { "lat": map.getCenter().lat, "lng": map.getCenter().lng }).done(function (data) {
                 let marcaGooglePlace;
                 marcaGooglePlace = data;
                 for (var i = 0; i < marcaGooglePlace.length; i++) {
@@ -349,8 +348,8 @@
                 }
             });
 
-			return false;
-		}
+            return false;
+        }
 
         function initializeGMap() {
 
@@ -473,17 +472,17 @@
         }
 
         function salvaLostPet() {
-            $.postJSON(varHost +"/api/pet", JSON.stringify($("#frmLostPet").serializeObject()));
+            $.postJSON(varHost + "/api/pet", JSON.stringify($("#frmLostPet").serializeObject()));
             returnSalvaLostPet();
         }
 
         function salvaAbandonado() {
-            $.postJSON(varHost +"/api/pet", JSON.stringify($("#frmLostPet").serializeObject()));
+            $.postJSON(varHost + "/api/pet", JSON.stringify($("#frmLostPet").serializeObject()));
             returnSalvaLostPet();
         }
 
         function salvaAdocao() {
-            $.postJSON(varHost +"/api/pet", JSON.stringify($("#frmLostPet").serializeObject()));
+            $.postJSON(varHost + "/api/pet", JSON.stringify($("#frmLostPet").serializeObject()));
             returnSalvaLostPet();
         }
 
@@ -570,12 +569,12 @@
             if ($("#naoMostrarInicio").prop('checked')) {
                 setCookie('nmi', 1, 10);
             }
-                     
+
         }
 
         function configuraModal(nome) {
 
-            var jsonConfig ;
+            var jsonConfig;
 
             switch (nome) {
                 case "inserir":
@@ -597,10 +596,10 @@
                     $("#mdInsertPetSalvar").unbind("click");
                     $("#mdInsertPetSalvar").click(salvaAdocao);
                     break;
-                
+
             }
 
-            
+
 
             jQuery.each(jsonConfig.labels, function () {
                 $("#" + this.n).text(this.v);
@@ -608,17 +607,28 @@
 
             jQuery.each(jsonConfig.elementos, function () {
                 if (!this.v) {
-                    $("#" + this.n).css("display","none");
+                    $("#" + this.n).css("display", "none");
                 }
-                
+
             });
 
-           
+
         }
 
         //Inicio do loading
         $(function () {
-            
+
+            var sqPet = '@ViewData["sqPet"]';
+
+            if (sqPet != '1')
+                loadPet(sqPet)
+            else {
+                if (getCookie('nmi') != "1")
+                $('#msgModal').modal();
+
+            }
+
+
 
             $(document).ajaxStop(function () {
                 $("#ajax_loader").hide();
@@ -628,15 +638,15 @@
                 $("#ajax_loader").show();
             });
 
-            if ($.urlParam('pet') != null) {
-                loadPet($.urlParam('pet'));
-            } else {
-                //se vier pelo pet não mostra
-                if (getCookie('nmi') != "1")
-                    $('#msgModal').modal();
-            }
+            //if ($.urlParam('pet') != null) {
+            //    loadPet($.urlParam('pet'));
+            //} else {
+            //    //se vier pelo pet não mostra
+            //    if (getCookie('nmi') != "1")
+            //        $('#msgModal').modal();
+            //}
 
-            
+
             populate();
             map.addLayer(markers);
             getLocation();
@@ -668,7 +678,7 @@
 
             //ver ações da página
 
-            
+
             //599e2433ecb29c2e6ce8e5cc
 
           //  $("body").on("contextmenu", my_selector, function () { return false; });

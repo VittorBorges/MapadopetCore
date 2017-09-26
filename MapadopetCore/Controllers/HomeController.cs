@@ -3,21 +3,31 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using MapadopetCore.Interfaces;
 
 namespace MapadopetCore.Controllers
 {
     public class HomeController : Controller
     {
+        private readonly IPetRepository _petRepository;
+
+        public HomeController(IPetRepository petRepository)
+        {
+            _petRepository = petRepository;
+        }
+
         public IActionResult Index()
         {
-
+            ViewData["sqPet"] = "1";
             ViewData["ogImage"] = "http://www.mapadopet.com.br/images/imgCompartilhamento.jpg";
-
             return View();
         }
 
-        public IActionResult Pet()
+        public IActionResult Pet(string id)
         {
+            var p = _petRepository.GetPet(id);
+            ViewData["ogImage"] = p.imagem;
+            ViewData["sqPet"] = id;
             return View("index");
         }
 
