@@ -20,6 +20,7 @@ namespace MapadopetCore.Controllers
         {
             ViewData["sqPet"] = "1";
             ViewData["ogImage"] = "http://www.mapadopet.com.br/images/imgCompartilhamento.jpg";
+            ViewData["ogUrl"] = "http://www.mapadopet.com.br";
             return View();
         }
 
@@ -28,6 +29,7 @@ namespace MapadopetCore.Controllers
             var p = _petRepository.GetPet(id);
             ViewData["ogImage"] = p.imagem;
             ViewData["sqPet"] = id;
+            ViewData["ogUrl"] = "http://www.mapadopet.com.br/home/pet/" + id;
             return View("index");
         }
 
