@@ -262,41 +262,40 @@
                 $('#mdShowPet').modal();
                 //leva até o ponto
                 map.flyTo(new L.LatLng(data.localizacao.split(",")[0], data.localizacao.split(",")[1], 13));
-                if (typeof DISQUS == "undefined") {
-                    $("#disqus_thread").hide();
-                    var disqus_config = function () {
-                        this.page.url = "http://www.mapadopet.com.br/pet/" + id;
-                        this.page.identifier = "showpet" + id;
-                    };
-                    (function () {
-                        var d = document, s = d.createElement('script');
-                        s.src = 'https://mapa-do-pet.disqus.com/embed.js';
-                        s.setAttribute('data-timestamp', +new Date());
-                        (d.head || d.body).appendChild(s);
-                        setTimeout(function () {
-                            DISQUS.reset({
-                                reload: true,
-                                config: function () {
-                                    this.page.url = "http://www.mapadopet.com.br/pet/" + id;
-                                    this.page.identifier = "showpet" + id;
-                                }
-                            });
-                            $("#disqus_thread").show();
-                        }, 2500);
-                    })();
-                } else {
+                //if (typeof DISQUS == "undefined") {
+                //    $("#disqus_thread").hide();
+                //    var disqus_config = function () {
+                //        this.page.url = "http://www.mapadopet.com.br/pet/" + id;
+                //        this.page.identifier = "showpet" + id;
+                //    };
+                //    (function () {
+                //        var d = document, s = d.createElement('script');
+                //        s.src = 'https://mapa-do-pet.disqus.com/embed.js';
+                //        s.setAttribute('data-timestamp', +new Date());
+                //        (d.head || d.body).appendChild(s);
+                //        setTimeout(function () {
+                //            DISQUS.reset({
+                //                reload: true,
+                //                config: function () {
+                //                    this.page.url = "http://www.mapadopet.com.br/pet/" + id;
+                //                    this.page.identifier = "showpet" + id;
+                //                }
+                //            });
+                //            $("#disqus_thread").show();
+                //        }, 2500);
+                //    })();
+                //} else {
 
-                    DISQUS.reset({
-                        reload: true,
-                        config: function () {
-                            this.page.url = "http://www.mapadopet.com.br/pet/" + id;
-                            this.page.identifier = "showpet" + id;
-                        }
-                    });
-                }
-
+                //    DISQUS.reset({
+                //        reload: true,
+                //        config: function () {
+                //            this.page.url = "http://www.mapadopet.com.br/pet/" + id;
+                //            this.page.identifier = "showpet" + id;
+                //        }
+                //    });
+                //}
                 window.history.pushState("", "", '/home/pet/' + id);
-
+                changeFBPet(id);
             });
         }
 
@@ -521,7 +520,6 @@
 
         $(document).on('hide.bs.modal', '#mdShowPet', function () {
             window.history.pushState("", "", "/");
-            alert('passou');
         });
 
         //Google Maps
@@ -541,10 +539,16 @@
             var js, fjs = d.getElementsByTagName(s)[0];
             if (d.getElementById(id)) { return; }
             js = d.createElement(s); js.id = id;
-            js.src = "//connect.facebook.net/pt_BR/sdk.js";
+            js.src = "//connect.facebook.net/pt_BR/sdk.js#xfbml=1&version=v2.10&appId=1006198022832693";
             fjs.parentNode.insertBefore(js, fjs);
         }(document, 'script', 'facebook-jssdk'));
 
+        function changeFBPet(value) {
+            var newVal = '<fb:comments href="http://www.mapadopet.com.br/home/pet/' + value + '" num_posts="20" width="500"></fb:comments><div id="fb-root"></div>';
+            $('#comments').html(newVal);
+            $('.fb-like').html('<fb:like href="http://www.mapadopet.com.br/home/pet/' + value + '"  send="true" width="450" show_faces="true"></fb:like>');
+            FB.XFBML.parse();
+        }
 
         //validar se é viavel
         function atualizaIconUserFb(userid) {
@@ -748,11 +752,20 @@
                     <div class="card-block">
                         <h4 class="card-title">Procura-se : {{:nome}}</h4>
                         <p class="card-text">{{:descricao}}</p>
-                        <button type="button" class="btn btn-primary" data-dismiss="modal">Eu vi</button>
-                        <button type="button" class="btn btn-success" data-dismiss="modal">Eu encontrei</button>
+                        
+                        <span class="fb-like">
+                            <fb:like send="true" width="450" show_faces="true"></fb:like>
+                        </span>
+
                     </div>
 
-                    <div id="disqus_thread" ></div>
+                    <span class="#comments">
+                        <fb:comments href="http://www.mapadopet.com.br/' + value + '" num_posts="20" width="500"></fb:comments>
+                    </span>
+                    
+
+
+                    @*<div id="disqus_thread" ></div>*@
 
                 </div>
             </div>
