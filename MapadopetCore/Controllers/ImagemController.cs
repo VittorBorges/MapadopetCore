@@ -19,11 +19,14 @@ namespace MapadopetCore.Controllers
     [Consumes("application/json","Application/json-patch+json","multipart/form-data")]
     public class ImagemController : Controller
     {
+
+        private readonly IMarcaRepository _marcaRepository;
         private readonly IImagemRepository _ImagemRepository;
 
-        public ImagemController(IImagemRepository imagemRepository)
+        public ImagemController(IImagemRepository imagemRepository, IMarcaRepository marcaRepository)
         {
             _ImagemRepository = imagemRepository;
+            _marcaRepository = marcaRepository;
         }
 
         [HttpGet("{filename}")]
@@ -58,6 +61,15 @@ namespace MapadopetCore.Controllers
             if (file.Length > 4194304) return false;
             if (!type.Contains(file.ContentType)) return false;
             return true;
+        }
+
+        [HttpGet]
+        public string categorizar()
+        {
+            string r = "";
+            var l = _marcaRepository.GetMarcaAvalia();
+            https://eastus.contentmoderator.cognitive.microsoft.com/mapadopet
+            return r;
         }
 
         //public async Task<string> UploadFileAsBlob(Stream stream, string filename)

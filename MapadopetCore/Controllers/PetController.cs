@@ -40,6 +40,7 @@ namespace MapadopetCore.Controllers
             return  _petRepository.GetPet(id);
         }
 
+
         private  Pet GetPetByIdInternal(string id)
         {
             return  _petRepository.GetPet(id) ?? new Pet();

@@ -117,7 +117,29 @@
             }]
         });
 
-        var markers = new L.MarkerClusterGroup();
+        map.on('zoomend', onZoomend);
+
+        function onZoomend() {
+            var zoom = map.getZoom();
+            if (zoom < 9) {
+                map.removeLayer(markersPlace);
+            } else {
+                map.addLayer(markersPlace);
+            }
+        }
+
+        var markers = new L.MarkerClusterGroup({
+            spiderfyOnMaxZoom: false,
+            showCoverageOnHover: false,
+            maxClusterRadius: 20
+        });
+
+        var markersPlace = new L.MarkerClusterGroup({
+            spiderfyOnMaxZoom: false,
+            showCoverageOnHover: false,
+            maxClusterRadius: 20
+        });
+
         var markersList = [];
         var Gmap;
         var Gmarkers = [];
@@ -227,7 +249,6 @@
         });
 
 
-
         function getLocation() {
             if (navigator.geolocation) {
                 navigator.geolocation.getCurrentPosition(showPosition);
@@ -240,8 +261,16 @@
             markers.clearLayers();
             markers = new L.MarkerClusterGroup();
             markersList = [];
+
+            markersPlace.clearLayers();
+            markersPlace = new L.MarkerClusterGroup();
+
+            alert('teste');
+            
+
             populate();
             map.addLayer(markers);
+            map.addLayer(markersPlace);
         }
 
         function posicionarMapa(lat, Lng) {
@@ -262,38 +291,7 @@
                 $('#mdShowPet').modal();
                 //leva até o ponto
                 map.flyTo(new L.LatLng(data.localizacao.split(",")[0], data.localizacao.split(",")[1], 13));
-                //if (typeof DISQUS == "undefined") {
-                //    $("#disqus_thread").hide();
-                //    var disqus_config = function () {
-                //        this.page.url = "http://www.mapadopet.com.br/pet/" + id;
-                //        this.page.identifier = "showpet" + id;
-                //    };
-                //    (function () {
-                //        var d = document, s = d.createElement('script');
-                //        s.src = 'https://mapa-do-pet.disqus.com/embed.js';
-                //        s.setAttribute('data-timestamp', +new Date());
-                //        (d.head || d.body).appendChild(s);
-                //        setTimeout(function () {
-                //            DISQUS.reset({
-                //                reload: true,
-                //                config: function () {
-                //                    this.page.url = "http://www.mapadopet.com.br/pet/" + id;
-                //                    this.page.identifier = "showpet" + id;
-                //                }
-                //            });
-                //            $("#disqus_thread").show();
-                //        }, 2500);
-                //    })();
-                //} else {
 
-                //    DISQUS.reset({
-                //        reload: true,
-                //        config: function () {
-                //            this.page.url = "http://www.mapadopet.com.br/pet/" + id;
-                //            this.page.identifier = "showpet" + id;
-                //        }
-                //    });
-                //}
                 window.history.pushState("", "", '/home/pet/' + id);
                 changeFBPet(id);
             });
@@ -314,7 +312,6 @@
                 marcaPet = data;
                 console.log(marcaPet);
                 for (var i = 0; i < marcaPet.length; i++) {
-                    console.log
                     let markerIcon = 0;
                     switch (marcaPet[i].tipo) {
                         case 0:
@@ -346,7 +343,7 @@
                     marker.on('click', function (a) {
                         loadGooglePlace(place_id);
                     });
-                    markers.addLayer(marker);
+                    markersPlace.addLayer(marker);
                 }
             });
 
@@ -472,6 +469,7 @@
                 alert('Não Conectado ao Facebook');
             }
         }
+        
 
         function salvaLostPet() {
             $.postJSON(varHost + "/api/pet", JSON.stringify($("#frmLostPet").serializeObject()));
@@ -660,6 +658,7 @@
 
             populate();
             map.addLayer(markers);
+            map.addLayer(markersPlace);
             getLocation();
 
             $("#upload-file-info").html($(this).val());
@@ -738,7 +737,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title">Pet perdido !!</h4>
+                <h4 class="modal-title">Mapadopet.com.br</h4>
             </div>
             <div class="modal-body">
                 <div class="card">
@@ -746,11 +745,11 @@
                     {{if imagem}}
                     <img class="card-img-top img-rounded img-responsive" src="{{:imagem}}" alt="{{:nome}}">
                     {{else}}
-                    <img class="card-img-top img-rounded img-responsive" src="~/images/petDefault.jpg" alt="{{:nome}}">
+                    <img class="card-img-top img-rounded img-responsive" src="images/petDefault.jpg" alt="{{:nome}}">
                     {{/if}}
 
                     <div class="card-block">
-                        <h4 class="card-title">Procura-se : {{:nome}}</h4>
+                        <h4 class="card-title">{{:tipoString}} : {{:nome}}</h4>
                         <p class="card-text">{{:descricao}}</p>
                         
                         <span class="fb-like">
@@ -759,7 +758,7 @@
 
                     </div>
 
-                    <span class="#comments">
+                    <span id="comments">
                         <fb:comments href="http://www.mapadopet.com.br/' + value + '" num_posts="20" width="500"></fb:comments>
                     </span>
                     
@@ -781,10 +780,10 @@
     @*mdShowGooglePlace Modal*@
     <script id="tmplmdShowGooglePlace" type="text/x-jsrender">
         <div class="modal-content">
-            @*<div class="modal-header">
+            <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                 <h4 class="modal-title">Local Relacionado</h4>
-            </div>*@
+            </div>
             <div class="modal-body">
                 <div class="card">
                     <div class="text-center">
@@ -792,7 +791,7 @@
                         {{if photos != null }}
                         <img class="card-img-top img-rounded img-responsive" style="width:300px" src="{{:img}}" alt="{{:name}}">
                         {{else}}
-                        <img class="card-img-top img-rounded img-responsive"  src="~/images/petshopDefault.jpg" alt="">
+                        <img class="card-img-top img-rounded img-responsive"  src="images/petshopDefault.jpg" alt="">
                         {{/if}}
 
                     </div>

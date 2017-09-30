@@ -8,6 +8,7 @@ namespace MapadopetCore.Interfaces
     public interface IMarcaRepository
     {
         Task<IEnumerable<Marca>> GetAllMarcas();
+        Task<IEnumerable<Marca>> GetMarcaAvalia();
         Task<Marca> GetMarca(string id);
         Task AddMarca(Marca item);
         Task<DeleteResult> RemoveMarca(string id);

@@ -28,9 +28,13 @@ namespace MapadopetCore.Data
         public Pet GetPet(string id)
         {
             var filter = Builders<Marca>.Filter.Eq("_id", ObjectId.Parse(id));
-            return _context.Marcas
+            var r = _context.Marcas
                               .Find(filter)//.Project<Marca>(Builders<Marca>.Projection.Include(p => p.pet))
                               .FirstOrDefault().pet;
+
+          
+            return r;
+
         }
 
         public void AddPet(Pet item)

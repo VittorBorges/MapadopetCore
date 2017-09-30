@@ -17,6 +17,8 @@ namespace MapadopetCore.Models
         public double[] cord { get; set; }
         public Pet pet { get; set; }
         public string id { get { return _id.ToString(); } }
+        public bool avaliado { get; set; } = false;
+
         //[BsonIgnore]
         //public tipoMarca enumTipo { get {
         //        //return EnumUtils.Parse<tipoMarca>(tipo.ToString()).Value ;
@@ -27,7 +29,7 @@ namespace MapadopetCore.Models
         //        tipo = (int)value;
         //    }
         //} 
-        
+
 
     }
 

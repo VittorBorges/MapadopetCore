@@ -21,6 +21,26 @@ namespace MapadopetCore.Models
         public string userid { get; set; } 
         public string username { get; set; }
         public string useremail { get; set; }
+        public string tipoString
+        {
+            get
+            {
+                string t = "";
+                switch (tipo)
+                {
+                    case 0:
+                        t = "Pet Perdido";
+                        break;
+                    case 1:
+                        t = "Pet para adoção";
+                        break;
+                    case 2:
+                        t = "Pet visto";
+                        break;
+
+                }
+                return t;
+            } }
 
 
     }
