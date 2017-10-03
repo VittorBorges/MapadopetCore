@@ -749,9 +749,28 @@
                     {{/if}}
 
                     <div class="card-block">
+
+                        <div class="btn-group" style="position:relative;top:-34px;">
+                            <button type="button" class="btn btn-info">Meu pet</button>
+                            <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <span class="caret"></span>
+                                <span class="sr-only">Abrir</span>
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li><a href="#">Editar</a></li>
+                                <li><a href="#">Adicionar Foto</a></li>
+                                <li role="separator" class="divider"></li>
+                                <li><a href="#">Encontrei o Pet</a></li>
+                                <li role="separator" class="divider"></li>
+                                <li><a href="#">Desativar a marcação</a></li>
+                            </ul>
+                        </div>
+
                         <h4 class="card-title">{{:tipoString}} : {{:nome}}</h4>
                         <p class="card-text">{{:descricao}}</p>
                         
+                        
+
                         <span class="fb-like">
                             <fb:like send="true" width="450" show_faces="true"></fb:like>
                         </span>
