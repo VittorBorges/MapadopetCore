@@ -27,7 +27,7 @@ namespace MapadopetCore.Data
 
         public async Task<IEnumerable<Marca>> GetMarcaAvalia()
         {
-            return await _context.Marcas.Find(i => i.avaliado == false).ToListAsync();
+            return await _context.Marcas.Find(i => i.avaliado == true).ToListAsync();
         }
 
         public async Task<Marca> GetMarca(string id)
