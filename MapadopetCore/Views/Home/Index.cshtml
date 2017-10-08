@@ -291,9 +291,15 @@
                 $('#mdShowPet').modal();
                 //leva até o ponto
                 map.flyTo(new L.LatLng(data.localizacao.split(",")[0], data.localizacao.split(",")[1], 13));
-
                 window.history.pushState("", "", '/home/pet/' + id);
                 changeFBPet(id);
+
+                if (data.userid == $("#hiddenuserid").val() ) {
+                    $(".petResponsavel").css('display', 'block');
+                }
+                
+
+
             });
         }
 
@@ -687,7 +693,9 @@
 
                 FB.getLoginStatus(function (response) {
                      if (response.status == "connected") {
-                        $("#hiddenaccessToken").val(response.authResponse.accessToken);
+                         $("#hiddenaccessToken").val(response.authResponse.accessToken);
+                         $("#hiddenuserid").val(response.authResponse.userID);
+                         
                     }
                     console.log(response);
                     objectFb.getLoginStatus = response.status;
@@ -757,7 +765,7 @@
                     <img class="card-img-top img-rounded img-responsive" src="images/petDefault.jpg" alt="{{:nome}}">
                     {{/if}}
 
-                    <div class="card-block">
+                    <div class="card-block petResponsavel" style="display:none">
 
                         <div class="btn-group" style="position:relative;top:-34px;">
                             <button type="button" class="btn btn-info">Meu pet</button>
