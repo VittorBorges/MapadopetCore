@@ -1,4 +1,9 @@
-﻿body {
+﻿html {
+    -webkit-user-select: none;
+    -webkit-touch-callout: none;
+}
+
+body {
     padding-top: 50px;
     padding-bottom: 20px;
 }
