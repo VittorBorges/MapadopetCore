@@ -67,6 +67,9 @@ namespace MapadopetCore.Controllers
         {
             _FacebookUserRepository.RemoveFacebookUser(id);
         }
+
+
+
     }
 }
 

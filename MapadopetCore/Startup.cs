@@ -39,7 +39,7 @@ namespace MapadopetCore
                 options.ConnectionString = Configuration.GetSection("MongoConnection:ConnectionString").Value;
                 options.Database = Configuration.GetSection("MongoConnection:Database").Value;
             });
-
+            services.AddTransient<IFacebookUserRepository, FacebookUserRepository>();
             services.AddTransient<IMarcaRepository, MarcaRepository>();
             services.AddTransient<IPetRepository, PetRepository>();
             services.AddTransient<IGoogleRepository, GoogleRepository>();

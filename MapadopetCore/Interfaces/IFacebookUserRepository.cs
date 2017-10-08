@@ -14,5 +14,6 @@ namespace MapadopetCore.Interfaces
         Task<UpdateResult> UpdateFacebookUser(string id, string body);
         Task<ReplaceOneResult> UpdateFacebookUserDocument(string id, FacebookUser body);
         Task<DeleteResult> RemoveAllFacebookUser();
+        Task<bool> checkLogin(string accessToken, string userID);
     }
 }

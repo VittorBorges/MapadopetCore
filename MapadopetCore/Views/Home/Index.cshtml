@@ -265,7 +265,7 @@
             markersPlace.clearLayers();
             markersPlace = new L.MarkerClusterGroup();
 
-            alert('teste');
+            //alert('teste');
             
 
             populate();
@@ -430,6 +430,7 @@
                 $("#hiddenuseremail").val(userObject.email);
                 $("#hiddenusername").val(userObject.name);
                 $("#hiddenuserid").val(userObject.id);
+                
                 $("#hiddenTipoPet").val(0);
                 configuraModal("inserir");
                 $('#mdInsertPet').modal();
@@ -445,6 +446,7 @@
                 $("#hiddenuseremail").val(userObject.email);
                 $("#hiddenusername").val(userObject.name);
                 $("#hiddenuserid").val(userObject.id);
+                
                 $("#hiddenTipoPet").val(2);
                 configuraModal("abandonado");
                 $('#mdInsertPet').modal();
@@ -460,6 +462,7 @@
                 $("#hiddenuseremail").val(userObject.email);
                 $("#hiddenusername").val(userObject.name);
                 $("#hiddenuserid").val(userObject.id.id);
+                
                 $("#hiddenTipoPet").val(1);
                 configuraModal("adocao");
                 $('#mdInsertPet').modal();
@@ -563,8 +566,11 @@
 
                     //$.postJSON("api/facebook/user", response );
 
-
-
+                    //if (response.status == "connected") {
+                    //    $("#hiddenaccessToken").val(response.authResponse.accessToken);
+                    //}
+                    //console.log(response.status);
+                    //console.log('teste');
                     console.log(response);
 
                 } else {
@@ -680,6 +686,9 @@
                 FB.AppEvents.logPageView();
 
                 FB.getLoginStatus(function (response) {
+                     if (response.status == "connected") {
+                        $("#hiddenaccessToken").val(response.authResponse.accessToken);
+                    }
                     console.log(response);
                     objectFb.getLoginStatus = response.status;
                 });
@@ -849,6 +858,7 @@
                     <input id="hiddenuseremail" name="useremail" type="hidden">
                     <input id="hiddenusername" name="username" type="hidden">
                     <input id="hiddenuserid" name="userid" type="hidden">
+                    <input id="hiddenaccessToken" name="accessToken" type="hidden">
                     <input id="hiddenTipoPet" name="tipo" type="hidden">
 
 

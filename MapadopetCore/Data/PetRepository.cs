@@ -39,13 +39,14 @@ namespace MapadopetCore.Data
 
         public void AddPet(Pet item)
         {
+            
 
             double[] loc = new double[2];
 
             if (item.localizacao != null && item.localizacao.Length > 0 && item.localizacao.Contains(","))
             {
-                double.TryParse(item.localizacao.Split(',')[0].ToString().Replace('.',','), out loc[0]);
-                double.TryParse(item.localizacao.Split(',')[1].ToString().Replace('.', ','), out loc[1]);
+                double.TryParse(item.localizacao.Split(',')[0], out loc[0]);
+                double.TryParse(item.localizacao.Split(',')[1], out loc[1]);
             }
 
             Marca m = new Marca()
@@ -54,11 +55,20 @@ namespace MapadopetCore.Data
                 tipo = item.tipo,
                 CreatedOn = DateTime.Now.ToString(),
                 cord = loc,
-                pet = item
+                pet = item,
+                avaliado = false
             };
 
-             _context.Marcas.InsertOneAsync(m);
-             
+            try
+            {
+                _context.Marcas.InsertOne(m);
+            }
+            catch (MongoException e)
+            {
+                Console.Write(e.InnerException);
+            }
+
+
         }
 
         public async Task<DeleteResult> RemovePet(string id)

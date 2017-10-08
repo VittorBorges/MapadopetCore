@@ -41,7 +41,9 @@ namespace MapadopetCore.Models
                 }
                 return t;
             } }
-
+        [BsonIgnore]
+        public string accessToken { get; set; }
+        
 
     }
 }

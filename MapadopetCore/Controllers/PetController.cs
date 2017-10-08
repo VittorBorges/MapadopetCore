@@ -15,10 +15,12 @@ namespace MapadopetCore.Controllers
     public class PetController : Controller
     {
         private readonly IPetRepository _petRepository;
+        private readonly IFacebookUserRepository _facebookUserRepository;
 
-        public PetController(IPetRepository petRepository)
+        public PetController(IPetRepository petRepository, IFacebookUserRepository facebookUserRepository)
         {
-           _petRepository = petRepository;
+            _petRepository = petRepository;
+            _facebookUserRepository = facebookUserRepository;
         }
 
         [NoCache]
@@ -47,8 +49,9 @@ namespace MapadopetCore.Controllers
         }
            
         [HttpPost]
-        public void Post([FromBody] Pet value)
+        public async void Post([FromBody] Pet value)
         {
+            if (await _facebookUserRepository.checkLogin(value.accessToken, value.userid))
             _petRepository.AddPet(value);
         }
         

@@ -7,12 +7,13 @@ using MongoDB.Driver;
 using MapadopetCore.Interfaces;
 using MapadopetCore.Models;
 using MongoDB.Bson;
-
+using Flurl.Http;
 
 namespace MapadopetCore.Data
 {
     public class FacebookUserRepository : IFacebookUserRepository
     {
+        
         private readonly MapadopetContext _context = null;
 
         public FacebookUserRepository(IOptions<Settings> settings)
@@ -74,7 +75,15 @@ namespace MapadopetCore.Data
 
             return await UpdateFacebookUserDocument(id, Item);
         }
-
         
+        public async Task<bool> checkLogin(string accessToken, string userID)
+        {
+            string url = string.Concat("https://graph.facebook.com/me?fields=id&access_token=",accessToken);
+            var responseString = await url
+    .PostUrlEncodedAsync(new { z = ""})
+    .ReceiveString();
+            return responseString.Split('"')[3] == userID;
+        }
+
     }
 }
