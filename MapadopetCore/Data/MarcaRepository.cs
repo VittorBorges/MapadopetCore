@@ -25,6 +25,18 @@ namespace MapadopetCore.Data
             return await _context.Marcas.Find(i => true).ToListAsync();
         }
 
+        public async Task<List<Marca>> GetAllMarcas(MapBounds m)
+        {
+            var filter = Builders<Marca>.Filter.GeoWithinBox("cord", m._southWest[0], m._southWest[1], m._northEast[1], m._northEast[0]);
+            return await _context.Marcas
+                                 .Find(filter)
+                                 .ToListAsync();
+            
+        }
+
+        
+
+
         public async Task<IEnumerable<Marca>> GetMarcaAvalia()
         {
             return await _context.Marcas.Find(i => i.avaliado == false).ToListAsync();

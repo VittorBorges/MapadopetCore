@@ -266,10 +266,7 @@
 
             markersPlace.clearLayers();
             markersPlace = new L.MarkerClusterGroup();
-
-            //alert('teste');
             
-
             populate();
             map.addLayer(markers);
             map.addLayer(markersPlace);
@@ -314,7 +311,8 @@
             });
         }
 
-        function populate() {
+        function populate(MapBounds) {
+
             $.get(varHost + "/api/marca", function (data) {
                 let marcaPet;
                 marcaPet = data;
