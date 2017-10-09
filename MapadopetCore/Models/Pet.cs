@@ -14,8 +14,6 @@ namespace MapadopetCore.Models
         public string descricao { get; set; } = string.Empty;
         public string contatos { get; set; } = string.Empty;
         public string localizacao { get; set; } = string.Empty;
-        //public DateTime UpdatedOn { get; set; } = DateTime.Now;
-        //public DateTime CreatedOn { get; set; } = DateTime.Now;
         public string UpdatedOn { get; set; }
         public string CreatedOn { get; set; }
         public string userid { get; set; } 
