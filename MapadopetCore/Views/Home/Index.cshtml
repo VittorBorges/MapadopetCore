@@ -705,6 +705,11 @@
 
             };
 
+
+            if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+                $('.mapClass').css('display', 'none');
+            } 
+
         });
 
     </script>
@@ -912,7 +917,7 @@
                         <img class="card-img-top img-rounded img-responsive" src="" />
                     </div>
 
-                    <div class="form-group" id="rowPetLocal">
+                    <div class="form-group mapClass" id="rowPetLocal">
                         <label for="tbNome" class="col-sm-4">Localização</label>
                         <div class="col-sm-12">
                             <input type="hidden" id="mapaLostpet" />
