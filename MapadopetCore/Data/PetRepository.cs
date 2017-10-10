@@ -37,8 +37,15 @@ namespace MapadopetCore.Data
 
         }
 
+        public void Desativar(Pet item)
+        {
+            var filter = Builders<Pet>.Filter.Eq(s => s._id, item._id);
+            var update = Builders<Pet>.Update
+                                .Set(s => s.ativo, false)
+                                .CurrentDate(s => s.UpdatedOn);
+             _context.Pets.UpdateOne(filter, update);
 
-
+        }
         public void AddPet(Pet item)
         {
             

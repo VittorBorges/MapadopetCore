@@ -16,7 +16,7 @@ namespace MapadopetCore.Models
         public string CreatedOn { get; set; }
         public double[] cord { get; set; }
         public Pet pet { get; set; }
-        public string id { get { return _id.ToString(); } }
+        public string id { get { return _id.ToString();  } }
         public bool avaliado { get; set; } = false;
 
         //[BsonIgnore]

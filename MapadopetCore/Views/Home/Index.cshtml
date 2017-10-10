@@ -311,33 +311,64 @@
             });
         }
 
+        //function populate(MapBounds) {
         function populate(MapBounds) {
 
-            $.get(varHost + "/api/marca", function (data) {
-                let marcaPet;
-                marcaPet = data;
-                console.log(marcaPet);
-                for (var i = 0; i < marcaPet.length; i++) {
-                    let markerIcon = 0;
-                    switch (marcaPet[i].tipo) {
-                        case 0:
-                            markerIcon = petLostIcon;
-                            break;
-                        case 1:
-                            markerIcon = petAdocaoIcon;
-                            break;
-                        case 2:
-                            markerIcon = petAbandonadoIcon;
-                            break;
+            //if (typeof MapBounds == "undefined") {
+                $.get(varHost + "/api/marca", function (data) {
+                    let marcaPet;
+                    marcaPet = data;
+                    console.log(marcaPet);
+                    for (var i = 0; i < marcaPet.length; i++) {
+                        let markerIcon = 0;
+                        switch (marcaPet[i].tipo) {
+                            case 0:
+                                markerIcon = petLostIcon;
+                                break;
+                            case 1:
+                                markerIcon = petAdocaoIcon;
+                                break;
+                            case 2:
+                                markerIcon = petAbandonadoIcon;
+                                break;
+                        }
+                        let marker = L.marker(new L.LatLng(marcaPet[i].cord[0], marcaPet[i].cord[1]), { title: marcaPet[i].nome, icon: markerIcon });
+                        marker.attribution = marcaPet[i].id;
+                        marker.on('click', function (a) {
+                            loadPet(this.attribution);
+                        });
+                        markers.addLayer(marker);
                     }
-                    let marker = L.marker(new L.LatLng(marcaPet[i].cord[0], marcaPet[i].cord[1]), { title: marcaPet[i].nome, icon: markerIcon });
-                    marker.attribution = marcaPet[i].id;
-                    marker.on('click', function (a) {
-                        loadPet(this.attribution);
-                    });
-                    markers.addLayer(marker);
-                }
-            });
+                });
+            //} else {
+                               
+
+            //    $.get(varHost + "/api/marca/GetAllMarcas", { "GetBounds": MapBounds }).done(function (data) {
+            //        let marcaPet;
+            //        marcaPet = data;
+            //        console.log(marcaPet);
+            //        for (var i = 0; i < marcaPet.length; i++) {
+            //            let markerIcon = 0;
+            //            switch (marcaPet[i].tipo) {
+            //                case 0:
+            //                    markerIcon = petLostIcon;
+            //                    break;
+            //                case 1:
+            //                    markerIcon = petAdocaoIcon;
+            //                    break;
+            //                case 2:
+            //                    markerIcon = petAbandonadoIcon;
+            //                    break;
+            //            }
+            //            let marker = L.marker(new L.LatLng(marcaPet[i].cord[0], marcaPet[i].cord[1]), { title: marcaPet[i].nome, icon: markerIcon });
+            //            marker.attribution = marcaPet[i].id;
+            //            marker.on('click', function (a) {
+            //                loadPet(this.attribution);
+            //            });
+            //            markers.addLayer(marker);
+            //        }
+            //    });
+            //}
 
 
             $.get(varHost + "/api/google/GetPlaces", { "lat": map.getCenter().lat, "lng": map.getCenter().lng }).done(function (data) {
@@ -478,20 +509,24 @@
                 alert('Não Conectado ao Facebook');
             }
         }
-        
+
+        function desativaPet() {
+            $.postJSON(varHost + "/api/pet/Desativar", "{'userid':'2032005333493013','accessToken':'EAAOTIbu5gjUBAPugdZAOLafDRDcEBpeIGFZARTTsBu7XvsyTWZByxa295Q6DmzZCl47GT9th0eBZAzZA4IKWZBeOQZB4ikAjoC97WBRvHXOHKfZBEjYTmYfBHzHPqBYpCxb4s5imNpbpMbbEX0BkPXeM03HBh26Dojsfj1dyDaNpe0XeTcLafkjo9Q05GFj90HvIRzz6huImXqgZDZD',_id:'59da2abd1255db5f805a836a'}");
+            returnSalvaLostPet();
+        }
 
         function salvaLostPet() {
-            $.postJSON(varHost + "/api/pet", JSON.stringify($("#frmLostPet").serializeObject()));
+            $.postJSON(varHost + "/api/pet/post", JSON.stringify($("#frmLostPet").serializeObject()));
             returnSalvaLostPet();
         }
 
         function salvaAbandonado() {
-            $.postJSON(varHost + "/api/pet", JSON.stringify($("#frmLostPet").serializeObject()));
+            $.postJSON(varHost + "/api/pet/post", JSON.stringify($("#frmLostPet").serializeObject()));
             returnSalvaLostPet();
         }
 
         function salvaAdocao() {
-            $.postJSON(varHost + "/api/pet", JSON.stringify($("#frmLostPet").serializeObject()));
+            $.postJSON(varHost + "/api/pet/post", JSON.stringify($("#frmLostPet").serializeObject()));
             returnSalvaLostPet();
         }
 

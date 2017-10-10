@@ -6,6 +6,8 @@ namespace MapadopetCore.Models
 {
     public class Pet
     {
+        internal object ativo;
+
         [BsonId]
         public ObjectId _id { get; set; }
         public string nome { get; set; } = string.Empty;
