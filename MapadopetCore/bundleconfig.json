@@ -24,7 +24,11 @@
       "wwwroot/js/icons.js",
       "wwwroot/js/object-observe-lite.min.js",
       "wwwroot/js/jsrender.min.js",
-      "wwwroot/js/config/modalHome.js"
+      "wwwroot/js/config/modalHome.js",
+      "wwwroot/js/app/mapas.js",
+      "wwwroot/js/app/facebook.js",
+      "wwwroot/js/app/app.js",
+      "wwwroot/js/app/eventos.js"
     ],
     // Optionally specify minification options
     "minify": {

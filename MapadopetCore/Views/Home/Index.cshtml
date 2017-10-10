@@ -12,7 +12,11 @@
         <script src="https://code.jquery.com/jquery-1.9.1.min.js" integrity="sha256-wS9gmOZBqsqWxgIVgA8Y9WcQOa7PgSIX+rPA0VL2rbQ=" crossorigin="anonymous"></script>
         <script src="https://unpkg.com/leaflet@1.0.3/dist/leaflet.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+<<<<<<< Updated upstream
         
+=======
+        <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&signed_in=true&key=AIzaSyBukZCOlWSgvLS-s7mPA5JQcL3uD6eRq84"></script>
+>>>>>>> Stashed changes
         <script src="~/js/leaflet.markercluster-src.js"></script>
         <script src="~/js/leaflet.groupedlayercontrol.js"></script>
         <script src="~/js/leaflet.contextmenu.min.js"></script>
@@ -21,9 +25,10 @@
         <script src="~/js/jsrender.min.js"></script>
         <script src="~/js/object-observe-lite.min.js"></script>
         <script src="~/js/config/modalHome.js"></script>
-
-        <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&signed_in=true&key=AIzaSyBukZCOlWSgvLS-s7mPA5JQcL3uD6eRq84"></script>
-
+        <script src="~/js/app/facebook.js"></script>
+        <script src="~/js/app/mapas.js"></script>
+        <script src="~/js/app/eventos.js"></script>
+        <script src="~/js/app/app.js"></script>
     </environment>
 
     <environment names="Staging,Production">
@@ -75,6 +80,7 @@
  
     <script type="text/javascript">
 
+<<<<<<< Updated upstream
         let posUser;
         let posPin = new L.LatLng(-10.185, -48.328);
 
@@ -565,6 +571,8 @@
         });
 
         //Google Maps
+=======
+>>>>>>> Stashed changes
         (function (i, s, o, g, r, a, m) {
             i['GoogleAnalyticsObject'] = r; i[r] = i[r] || function () {
                 (i[r].q = i[r].q || []).push(arguments)
@@ -575,6 +583,7 @@
         ga('create', 'UA-272851-15', 'auto');
         ga('send', 'pageview');
 
+<<<<<<< Updated upstream
 
         //Facebook
         (function (d, s, id) {
@@ -673,15 +682,16 @@
         }
 
         //Inicio do loading
+=======
+>>>>>>> Stashed changes
         $(function () {
 
             var sqPet = '@ViewData["sqPet"]';
-
             if (sqPet != '1')
                 loadPet(sqPet)
             else {
                 if (getCookie('nmi') != "1")
-                $('#msgModal').modal();
+                    $('#msgModal').modal();
 
             }
 
@@ -693,15 +703,6 @@
             $(document).ajaxStart(function () {
                 $("#ajax_loader").show();
             });
-
-            //if ($.urlParam('pet') != null) {
-            //    loadPet($.urlParam('pet'));
-            //} else {
-            //    //se vier pelo pet não mostra
-            //    if (getCookie('nmi') != "1")
-            //        $('#msgModal').modal();
-            //}
-
 
             populate();
             map.addLayer(markers);
@@ -739,11 +740,15 @@
             };
 
 
+<<<<<<< Updated upstream
             if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
                 $('.mapClass').css('display', 'none');
             } 
 
+=======
+>>>>>>> Stashed changes
         });
+
 
     </script>
 
