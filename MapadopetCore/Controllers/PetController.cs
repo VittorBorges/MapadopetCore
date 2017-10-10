@@ -11,7 +11,7 @@ using System.Collections.Generic;
 namespace MapadopetCore.Controllers
 {
     [Produces("application/json")]
-    [Route("api/[controller]/[action]")]
+    [Route("api/[controller]")]
     public class PetController : Controller
     {
         private readonly IPetRepository _petRepository;
@@ -57,8 +57,10 @@ namespace MapadopetCore.Controllers
         [HttpPost]
         public async void Desativar([FromBody] Pet value)
         {
-            if (await _facebookUserRepository.checkLogin(value.accessToken, value.userid))
-                _petRepository.Desativar(value);
+            //if (await _facebookUserRepository.checkLogin(value.accessToken, value.userid))
+            //    _petRepository.Desativar(value);
+            Console.Write(value);
+
         }
 
         [HttpPut("{id}")]
