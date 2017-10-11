@@ -517,22 +517,27 @@
         }
 
         function desativaPet() {
-            $.postJSON(varHost + "/api/pet/Desativar", "{'userid':'2032005333493013','accessToken':'EAAOTIbu5gjUBAPugdZAOLafDRDcEBpeIGFZARTTsBu7XvsyTWZByxa295Q6DmzZCl47GT9th0eBZAzZA4IKWZBeOQZB4ikAjoC97WBRvHXOHKfZBEjYTmYfBHzHPqBYpCxb4s5imNpbpMbbEX0BkPXeM03HBh26Dojsfj1dyDaNpe0XeTcLafkjo9Q05GFj90HvIRzz6huImXqgZDZD',_id:'59da2abd1255db5f805a836a'}");
+        //    $.postJSON(varHost + "/api/pet/Desativar", "{'userid':'2032005333493013','accessToken':'EAAOTIbu5gjUBAPugdZAOLafDRDcEBpeIGFZARTTsBu7XvsyTWZByxa295Q6DmzZCl47GT9th0eBZAzZA4IKWZBeOQZB4ikAjoC97WBRvHXOHKfZBEjYTmYfBHzHPqBYpCxb4s5imNpbpMbbEX0BkPXeM03HBh26Dojsfj1dyDaNpe0XeTcLafkjo9Q05GFj90HvIRzz6huImXqgZDZD',_id:'59da2abd1255db5f805a836a'}");
+            //$.postJSON(varHost + "/api/pet/Desativar", JSON.stringify("userid:2032005333493013,accessToken:EAAOTIbu5gjUBAPugdZAOLafDRDcEBpeIGFZARTTsBu7XvsyTWZByxa295Q6DmzZCl47GT9th0eBZAzZA4IKWZBeOQZB4ikAjoC97WBRvHXOHKfZBEjYTmYfBHzHPqBYpCxb4s5imNpbpMbbEX0BkPXeM03HBh26Dojsfj1dyDaNpe0XeTcLafkjo9Q05GFj90HvIRzz6huImXqgZDZD,_id:59da2abd1255db5f805a836a"));
+            $.postJSON(varHost + "/api/pet/Desativar", JSON.stringify($("#frmLostPet").serializeObject()));
+
+            $.postJSON(varHost + "/api/pet", JSON.stringify($("#frmLostPet").serializeObject()));
+
             returnSalvaLostPet();
         }
 
         function salvaLostPet() {
-            $.postJSON(varHost + "/api/pet/post", JSON.stringify($("#frmLostPet").serializeObject()));
+            $.postJSON(varHost + "/api/pet", JSON.stringify($("#frmLostPet").serializeObject()));
             returnSalvaLostPet();
         }
 
         function salvaAbandonado() {
-            $.postJSON(varHost + "/api/pet/post", JSON.stringify($("#frmLostPet").serializeObject()));
+            $.postJSON(varHost + "/api/pet", JSON.stringify($("#frmLostPet").serializeObject()));
             returnSalvaLostPet();
         }
 
         function salvaAdocao() {
-            $.postJSON(varHost + "/api/pet/post", JSON.stringify($("#frmLostPet").serializeObject()));
+            $.postJSON(varHost + "/api/pet", JSON.stringify($("#frmLostPet").serializeObject()));
             returnSalvaLostPet();
         }
 
