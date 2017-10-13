@@ -8,3 +8,5 @@ MapadopetCore/bin/
 *.cache
 *.csproj.user
 *.suo
+
+MapadopetCore/wwwroot/js/site\.min\.js

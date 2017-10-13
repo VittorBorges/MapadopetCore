@@ -54,13 +54,12 @@ namespace MapadopetCore.Controllers
                 _petRepository.AddPet(value);
         }
 
-        [HttpPost]
-        public async void Desativar([FromBody] Pet value)
+                
+        [HttpPost("Desativar")]
+        public async void Desativar([FromBody] Models.app.postPetDesativa val)
         {
-            //if (await _facebookUserRepository.checkLogin(value.accessToken, value.userid))
-            //    _petRepository.Desativar(value);
-            Console.Write(value);
-
+            if (await _facebookUserRepository.checkLogin(val.accessToken, val.userid))
+                _petRepository.Desativar(new Pet() { _id = new MongoDB.Bson.ObjectId(val.petid) });
         }
 
         [HttpPut("{id}")]

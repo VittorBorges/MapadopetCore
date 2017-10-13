@@ -51,6 +51,8 @@ $.fn.serializeObject = function () {
 };
 
 $.postJSON = function (url, data, callback) {
+    console.log(data);
+    console.log(url);
     return jQuery.ajax({
         headers: {
             'Accept': 'application/json',
@@ -63,3 +65,5 @@ $.postJSON = function (url, data, callback) {
         'success': callback
     });
 };
+
+
