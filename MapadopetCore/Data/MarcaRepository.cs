@@ -22,7 +22,7 @@ namespace MapadopetCore.Data
 
         public async Task<IEnumerable<Marca>> GetAllMarcas()
         {
-            return await _context.Marcas.Find(i => true).ToListAsync();
+            return await _context.Marcas.Find(i => i.pet.ativo).ToListAsync();
         }
 
         public async Task<List<Marca>> GetAllMarcas(MapBounds m)
