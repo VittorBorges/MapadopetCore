@@ -10,10 +10,8 @@ namespace MapadopetCore.Models
         public ObjectId _id { get; set; }
         public string nome { get; set; } = string.Empty;
         public int tipo { get; set; } = 0;
-        //public DateTime UpdatedOn { get; set; } = DateTime.Now;
-        //public DateTime CreatedOn { get; set; } = DateTime.Now;
-        public string UpdatedOn { get; set; }
-        public string CreatedOn { get; set; }
+        public DateTime UpdatedOn { get; set; }
+        public DateTime CreatedOn { get; set; }
         public double[] cord { get; set; }
         public Pet pet { get; set; }
         public string id { get { return _id.ToString();  } }

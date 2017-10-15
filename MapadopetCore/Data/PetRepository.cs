@@ -29,23 +29,20 @@ namespace MapadopetCore.Data
         {
             var filter = Builders<Marca>.Filter.Eq("_id", ObjectId.Parse(id));
             var r = _context.Marcas
-                              .Find(filter)//.Project<Marca>(Builders<Marca>.Projection.Include(p => p.pet))
+                              .Find(filter)
                               .FirstOrDefault().pet;
-
-          
             return r;
-
         }
 
-        public void Desativar(Pet item)
+        public async Task<UpdateResult> Desativar(Pet item)
         {
-            var filter = Builders<Pet>.Filter.Eq(s => s._id, item._id);
-            var update = Builders<Pet>.Update
-                                .Set(s => s.ativo, false)
+            var filter = Builders<Marca>.Filter.Eq(s => s._id, item._id);
+            var update = Builders<Marca>.Update
+                                .Set(s => s.pet.ativo, false)
                                 .CurrentDate(s => s.UpdatedOn);
-             _context.Pets.UpdateOne(filter, update);
-
+             return await _context.Marcas.UpdateOneAsync(filter, update);
         }
+
         public void AddPet(Pet item)
         {
             
@@ -62,7 +59,7 @@ namespace MapadopetCore.Data
             {
                 nome = item.nome,
                 tipo = item.tipo,
-                CreatedOn = DateTime.Now.ToString(),
+                CreatedOn = DateTime.Now,
                 cord = loc,
                 pet = item,
                 avaliado = false
@@ -112,7 +109,7 @@ namespace MapadopetCore.Data
         {
             var Item = GetPet(id) ?? new Pet();
             item.nome = item.nome;
-            item.UpdatedOn = DateTime.Now.ToString();
+            item.UpdatedOn = DateTime.Now;
 
             return await UpdatePet(id, Item);
         }

@@ -87,7 +87,7 @@ namespace MapadopetCore.Data
         {
             var item = await GetMarca(id) ?? new Marca();
             item.nome = m.nome;
-            item.UpdatedOn = DateTime.Now.ToString();
+            item.UpdatedOn = DateTime.Now;
 
             return await UpdateMarca(id, item);
         }
