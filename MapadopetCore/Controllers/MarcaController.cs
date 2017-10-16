@@ -38,7 +38,13 @@ namespace MapadopetCore.Controllers
         {
             return await _marcaRepository.GetAllMarcas(m);
         }
-        
+
+        [HttpGet("getmarcas/{id}")]
+        public async Task<IEnumerable<Marca>> GetMarcas(string id)
+        {
+            return await _marcaRepository.GetMarcas(id);
+        }
+
         [HttpGet("{id}")]
         public Task<Marca> Get(string id)
         {

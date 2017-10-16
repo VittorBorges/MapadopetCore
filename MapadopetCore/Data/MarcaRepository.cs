@@ -34,7 +34,11 @@ namespace MapadopetCore.Data
             
         }
 
-        
+        public async Task<IEnumerable<Marca>> GetMarcas(string id)
+        {
+            return await _context.Marcas.Find(i => i.pet.userid == id).ToListAsync();
+        }
+
 
 
         public async Task<IEnumerable<Marca>> GetMarcaAvalia()

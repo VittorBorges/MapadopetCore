@@ -16,5 +16,6 @@ namespace MapadopetCore.Interfaces
         Task<ReplaceOneResult> UpdateMarcaDocument(string id, Marca body);
         Task<DeleteResult> RemoveAllMarcas();
         Task<List<Marca>> GetAllMarcas(MapBounds m);
+        Task<IEnumerable<Marca>> GetMarcas(string id);
     }
 }
