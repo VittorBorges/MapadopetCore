@@ -40,3 +40,9 @@ textarea {
         display: none;
     }
 }
+
+#mdListPet .thumbnail img {
+    max-width: 100px;
+    width: 100%;
+    height: auto;
+}

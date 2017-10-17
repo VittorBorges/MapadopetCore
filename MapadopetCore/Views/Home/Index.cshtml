@@ -144,10 +144,8 @@
             maxClusterRadius: 20
         });
 
-        var markersList = [];
         var Gmap;
         var Gmarkers = [];
-        //var getLoginStatus = '';
         var userObject = null;
         var objectFb = { getLoginStatus: null };
         var fbUserId = null;
@@ -261,16 +259,11 @@
         }
 
         function atualizaMapa() {
-            markers.clearLayers();
-            markers = new L.MarkerClusterGroup();
-            markersList = [];
+            console.log("atualizou");
 
-            markersPlace.clearLayers();
-            markersPlace = new L.MarkerClusterGroup();
-
-            populate();
-            map.addLayer(markers);
-            map.addLayer(markersPlace);
+            populatePets();
+            populatePlaces();
+            
         }
 
         function posicionarMapa(lat, Lng) {
@@ -283,7 +276,7 @@
             //map.flyTo(new L.LatLng(position.coords.latitude, position.coords.longitude), 13);
         }
 
-        function loadPet(userId) {
+        function loadPet(id) {
             $.get(varHost + "/api/pet/" + id, function (data) {
                 var tmpl = $.templates("#tmplmdShowPet");
                 var html = tmpl.render(data);
@@ -334,65 +327,11 @@
             });
         }
 
-        //function populate(MapBounds) {
-        function populate() {
+       
+        function populatePlaces() {
 
-            //if (typeof MapBounds == "undefined") {
-                $.get(varHost + "/api/marca", function (data) {
-                    let marcaPet;
-                    marcaPet = data;
-                    console.log(marcaPet);
-                    for (var i = 0; i < marcaPet.length; i++) {
-                        let markerIcon = 0;
-                        switch (marcaPet[i].tipo) {
-                            case 0:
-                                markerIcon = petLostIcon;
-                                break;
-                            case 1:
-                                markerIcon = petAdocaoIcon;
-                                break;
-                            case 2:
-                                markerIcon = petAbandonadoIcon;
-                                break;
-                        }
-                        let marker = L.marker(new L.LatLng(marcaPet[i].cord[0], marcaPet[i].cord[1]), { title: marcaPet[i].nome, icon: markerIcon });
-                        marker.attribution = marcaPet[i].id;
-                        marker.on('click', function (a) {
-                            loadPet(this.attribution);
-                        });
-                        markers.addLayer(marker);
-                    }
-                });
-            //} else {
-
-
-            //    $.get(varHost + "/api/marca/GetAllMarcas", { "GetBounds": MapBounds }).done(function (data) {
-            //        let marcaPet;
-            //        marcaPet = data;
-            //        console.log(marcaPet);
-            //        for (var i = 0; i < marcaPet.length; i++) {
-            //            let markerIcon = 0;
-            //            switch (marcaPet[i].tipo) {
-            //                case 0:
-            //                    markerIcon = petLostIcon;
-            //                    break;
-            //                case 1:
-            //                    markerIcon = petAdocaoIcon;
-            //                    break;
-            //                case 2:
-            //                    markerIcon = petAbandonadoIcon;
-            //                    break;
-            //            }
-            //            let marker = L.marker(new L.LatLng(marcaPet[i].cord[0], marcaPet[i].cord[1]), { title: marcaPet[i].nome, icon: markerIcon });
-            //            marker.attribution = marcaPet[i].id;
-            //            marker.on('click', function (a) {
-            //                loadPet(this.attribution);
-            //            });
-            //            markers.addLayer(marker);
-            //        }
-            //    });
-            //}
-
+            markersPlace.clearLayers();
+            markersPlace = new L.MarkerClusterGroup();
 
             $.get(varHost + "/api/google/GetPlaces", { "lat": map.getCenter().lat, "lng": map.getCenter().lng }).done(function (data) {
                 let marcaGooglePlace;
@@ -406,6 +345,44 @@
                     markersPlace.addLayer(marker);
                 }
             });
+
+            map.addLayer(markersPlace);
+
+            return false;
+        }
+
+        function populatePets() {
+
+            markers.clearLayers();
+            markers = new L.MarkerClusterGroup();
+
+            $.get(varHost + "/api/marca", function (data) {
+                let marcaPet;
+                marcaPet = data;
+                console.log(marcaPet);
+                for (var i = 0; i < marcaPet.length; i++) {
+                    let markerIcon = 0;
+                    switch (marcaPet[i].tipo) {
+                        case 0:
+                            markerIcon = petLostIcon;
+                            break;
+                        case 1:
+                            markerIcon = petAdocaoIcon;
+                            break;
+                        case 2:
+                            markerIcon = petAbandonadoIcon;
+                            break;
+                    }
+                    let marker = L.marker(new L.LatLng(marcaPet[i].cord[0], marcaPet[i].cord[1]), { title: marcaPet[i].nome, icon: markerIcon });
+                    marker.attribution = marcaPet[i].id;
+                    marker.on('click', function (a) {
+                        loadPet(this.attribution);
+                    });
+                    markers.addLayer(marker);
+                }
+            });
+
+            map.addLayer(markers);
 
             return false;
         }
@@ -535,7 +512,21 @@
 
         function desativaPet(id) {
             var obj = { "accessToken": $("#hiddenaccessToken").val(), "userid": $("#hiddenuserid").val(), "petid": id };
-            $.postJSON(varHost + "/api/pet/Desativar", JSON.stringify(obj));
+            $.postJSON(varHost + "/api/pet/Desativar", JSON.stringify(obj)).always(function () {
+                $("#mdListPet").modal("hide");
+                populatePets();
+            });
+
+            
+        }
+
+        function ativaPet(id) {
+            var obj = { "accessToken": $("#hiddenaccessToken").val(), "userid": $("#hiddenuserid").val(), "petid": id };
+            $.postJSON(varHost + "/api/pet/Ativar", JSON.stringify(obj)).always(function () {
+                $("#mdListPet").modal("hide");
+                populatePets();
+            });
+
         }
 
         function salvaLostPet() {
@@ -717,9 +708,11 @@
                 $("#ajax_loader").modal();
             });
 
-            populate();
-            map.addLayer(markers);
-            map.addLayer(markersPlace);
+            populatePlaces();
+            populatePets();
+
+            
+            
             getLocation();
 
             $("#upload-file-info").html($(this).val());
@@ -810,7 +803,7 @@
     <div class="modal-content">
         <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-            <h4 class="modal-title">Mapadopet.com.br</h4>
+            <h4 class="modal-title">{{:tipoString}} : {{:nome}}</h4>
         </div>
         <div class="modal-body">
             <div class="card">
@@ -826,7 +819,7 @@
                     <button type="button" class="btn btn-primary">Desativar</button>
                 </div>
 
-                <h4 class="card-title">{{:tipoString}} : {{:nome}}</h4>
+                @*<h4 class="card-title"></h4>*@
                 <p class="card-text">{{:descricao}}</p>
 
                 <span class="fb-like">
@@ -947,7 +940,7 @@
                         <img class="card-img-top img-rounded img-responsive" src="" />
                     </div>
 
-                    <div class="form-group mapClass" id="rowPetLocal">
+                    <div class="form-group mapClass" style="display:none" id="rowPetLocal">
                         <label for="tbNome" class="col-sm-4">Localização</label>
                         <div class="col-sm-12">
                             <input type="hidden" id="mapaLostpet" />
@@ -957,6 +950,7 @@
                             <span class="help-block">Posicione a marcação no mapa na região que o seu pet sumiu. Não coloque em cima da sua residencia, coloque a marcação nas ruas ;).</span>
                         </div>
                     </div>
+
                 </form>
 
             </div>
@@ -1004,15 +998,13 @@
                 <div class="caption">
                     <h3>{{:pet.nome}}</h3>
                     <p>
-                        <a href="#" class="btn btn-primary" role="button">Editar</a>
-
                         {{if pet.ativo}}
-                        <a href="#" class="btn btn-default" role="button">Desativar</a>
+                        <a href="#" class="btn btn-default" onclick="desativaPet('{{:id}}');" role="button">Desativar</a>
+                        <a href="#" style="display:none" class="btn btn-default" onclick="ativaPet('{{:id}}');" role="button">Ativar</a>
                         {{else}}
-                        <a href="#" class="btn btn-default" role="button">Ativar</a>
+                        <a href="#" style="display:none"class="btn btn-default" onclick="desativaPet('{{:id}}');" role="button">Desativar</a>
+                        <a href="#" class="btn btn-default" onclick="ativaPet('{{:id}}');" role="button">Ativar</a>
                         {{/if}}
-
-                        
                         
                     </p>
                 </div>

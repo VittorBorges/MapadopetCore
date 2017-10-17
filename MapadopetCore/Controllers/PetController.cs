@@ -50,16 +50,51 @@ namespace MapadopetCore.Controllers
         [HttpPost]
         public async void Post([FromBody] Pet value)
         {
-            if (await _facebookUserRepository.checkLogin(value.accessToken, value.userid))
-                _petRepository.AddPet(value);
+            try
+            {
+                if (await _facebookUserRepository.checkLogin(value.accessToken, value.userid))
+                    _petRepository.AddPet(value);
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+            
+            
         }
 
-                
+
         [HttpPost("Desativar")]
         public async void Desativar([FromBody] Models.app.postPetDesativa val)
         {
-            if (await _facebookUserRepository.checkLogin(val.accessToken, val.userid))
-                _petRepository.Desativar(new Pet() { _id = new MongoDB.Bson.ObjectId(val.petid) });
+            try
+            {
+                if (await _facebookUserRepository.checkLogin(val.accessToken, val.userid))
+                    _petRepository.Desativar(new Pet() { _id = new MongoDB.Bson.ObjectId(val.petid) });
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+            
+        }
+
+        [HttpPost("Ativar")]
+        public async void Ativar([FromBody] Models.app.postPetDesativa val)
+        {
+            try
+            {
+                if (await _facebookUserRepository.checkLogin(val.accessToken, val.userid))
+                    _petRepository.Ativar(new Pet() { _id = new MongoDB.Bson.ObjectId(val.petid) });
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+            
         }
 
         [HttpPut("{id}")]

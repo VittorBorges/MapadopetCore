@@ -40,7 +40,16 @@ namespace MapadopetCore.Data
             var update = Builders<Marca>.Update
                                 .Set(s => s.pet.ativo, false)
                                 .CurrentDate(s => s.UpdatedOn);
-             return await _context.Marcas.UpdateOneAsync(filter, update);
+            return await _context.Marcas.UpdateOneAsync(filter, update);
+        }
+
+        public async Task<UpdateResult> Ativar(Pet item)
+        {
+            var filter = Builders<Marca>.Filter.Eq(s => s._id, item._id);
+            var update = Builders<Marca>.Update
+                                .Set(s => s.pet.ativo, true)
+                                .CurrentDate(s => s.UpdatedOn);
+            return await _context.Marcas.UpdateOneAsync(filter, update);
         }
 
         public void AddPet(Pet item)

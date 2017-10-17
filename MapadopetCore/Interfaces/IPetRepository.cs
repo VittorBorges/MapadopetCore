@@ -15,5 +15,6 @@ namespace MapadopetCore.Interfaces
         Task<ReplaceOneResult> UpdatePetDocument(string id, Pet body);
         Task<DeleteResult> RemoveAllPets();
         Task<UpdateResult> Desativar(Pet item);
+        Task<UpdateResult> Ativar(Pet item);
     }
 }
